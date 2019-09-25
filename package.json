@@ -1,19 +1,25 @@
 {
   "name": "poc-stream",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "private": true,
   "description": "A proof of concept for streaming video to a browser",
-  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
   "keywords": [
     "video",
     "stream",
-    "proof",
-    "of",
-    "concept",
+    "poc",
     "js"
   ],
   "author": "Dennis Volkering",
-  "license": "ISC"
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "node-sass-middleware": "0.11.0",
+    "twig": "~0.10.3"
+  }
 }
