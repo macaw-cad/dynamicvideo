@@ -5,6 +5,8 @@ const Question = require('./question');
 const QuestionList = require('./questionList');
 const Answer = require('./answer');
 const AnswerList = require('./answerList');
+const Tag = require('./tag');
+const TagList = require('./tagList');
 
 class Questionnaire {
 
@@ -15,6 +17,7 @@ class Questionnaire {
     constructor(json) {
         this._questionList = new QuestionList();
         this._answerList = new AnswerList();
+        this._tagList = new TagList();
 
         this.generateQuestionList();
     }
@@ -26,12 +29,21 @@ class Questionnaire {
     get answerList() {
         return this._answerList;
     }
+
     /**
      *
      * @returns QuestionList
      */
     get questionList() {
         return this._questionList;
+    }
+
+    /**
+     *
+     * @returns QuestionList
+     */
+    get tagList() {
+        return this._tagList;
     }
 
 
@@ -44,6 +56,7 @@ class Questionnaire {
 
             this.parseJsonToQuestions(JSON.parse(string).questions);
             this.parseJsonToAnswers(JSON.parse(string).answers);
+            this.parseJsonToTags(JSON.parse(string).tags);
         });
     }
 
@@ -54,12 +67,12 @@ class Questionnaire {
     parseJsonToQuestions(questions) {
         if ('undefined' !== typeof questions) {
             for (let q in questions) {
-               this.questionList.addQuestion(new Question(questions[q]));
+                this.questionList.addQuestion(new Question(questions[q]));
             }
         } else {
             console.error('No questions found in JSON file! TODO GOOD LOGGING');
         }
-        console.table(this.questionList.all());
+        // console.table(this.questionList.all());
     }
 
     /**
@@ -75,7 +88,23 @@ class Questionnaire {
             console.error('No answers found in JSON file! TODO GOOD LOGGING');
         }
 
-        console.table(this.answerList.all());
+        // console.table(this.answerList.all());
+    }
+
+    /**
+     * Parse json to tags
+     * @param tags in JSON format
+     */
+    parseJsonToTags(tags) {
+        if ('undefined' !== typeof tags) {
+            for (let a in tags) {
+                this.tagList.addTag(new Tag(tags[a]));
+            }
+        } else {
+            console.error('No tags found in JSON file! TODO GOOD LOGGING');
+        }
+
+        // console.table(this.tagList.all());
     }
 
     /**
@@ -83,13 +112,44 @@ class Questionnaire {
      * @param answer
      */
     getCurrentQuestion(answer) {
-        this.answerList.addGivenAnswer(answer);
+
+        //test
+        answer = this.answerList.all()[3];
+        console.log(answer);
+        //end test
+
+        if (answer !== null || typeof answer !== 'undefined') {
+            try {
+                // Set the given answer to the given-answer list
+                this.answerList.addGivenAnswer(answer);
+
+                // Update tag count
+                for (let id in answer.tags) {
+                    let tag = this.tagList.find(answer.tags[id]);
+                    tag.count++;
+                }
+
+            } catch (e) {
+                // TODO: Maybe throw error forward to user in json?
+                console.error(e);
+            }
+        } else {
+            console.log('No answer given');
+
+            return;
+        }
+
+        // Change stream input
 
 
+        // Send new question (_basedOn)
+
+
+
+
+        console.table(this.tagList.all());
 
     }
-
-
 
 
 }

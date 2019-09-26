@@ -79,18 +79,30 @@
       ]
     }
   ],
-  "tags": {
-    "relax": {
+  "tags": [
+    {
+      "id": 1,
+      "title": "relax"
     },
-    "adventure": {
+    {
+      "id": 2,
+      "title": "adventure"
     },
-    "nature": {
+    {
+      "id": 3,
+      "title": "nature"
     },
-    "city": {
+    {
+      "id": 4,
+      "title": "city"
     },
-    "busy": {
+    {
+      "id": 5,
+      "title": "busy"
     },
-    "business": {
+    {
+      "id": 6,
+      "title": "business"
     }
-  }
+  ]
 }

@@ -29,7 +29,14 @@ class AnswerList {
      * @param answer The answer to add to the list
      */
     addGivenAnswer(answer) {
-        this.givenAnswers.push(answer);
+        console.log('test');
+
+        // check if the answer is already in the list
+        if (!this.givenAnswers.includes(answer)) {
+            this.givenAnswers.push(answer);
+        } else {
+            throw new Error("This answer is already submitted ");
+        }
     }
 
     /**
@@ -61,6 +68,10 @@ class AnswerList {
      * @returns {array} All given answers
      */
     get givenAnswers() {
+        if (typeof this._givenAnswers === "undefined") {
+            this._givenAnswers = [];
+        }
+
         return this._givenAnswers;
     }
 
@@ -71,6 +82,8 @@ class AnswerList {
     set givenAnswers(ga) {
         this._givenAnswers = ga;
     }
+
+
 }
 
 module.exports = AnswerList;
