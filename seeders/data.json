@@ -1,0 +1,96 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "desc": "What do you like more, the city or beautiful nature?",
+      "answers": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 2,
+      "desc": "What do you like more, relaxing or doing activities?",
+      "answers": [
+        3,
+        4
+      ],
+      "based_on": [
+        "nature"
+      ]
+    },
+    {
+      "id": 3,
+      "desc": "Do you like extreme sports?",
+      "answers": [
+        5,
+        6
+      ],
+      "based_on": [
+        "adventure"
+      ]
+    }
+  ],
+  "answers": [
+    {
+      "id": 1,
+      "desc": "City",
+      "tags": [
+        "busy",
+        "city",
+        "business"
+      ]
+    },
+    {
+      "id": 2,
+      "desc": "Nature",
+      "tags": [
+        "nature"
+      ]
+    },
+    {
+      "id": 3,
+      "desc": "Doing activities",
+      "tags": [
+        "adventure"
+      ]
+    },
+    {
+      "id": 4,
+      "desc": "Relax",
+      "tags": [
+        "relax"
+      ]
+    },
+    {
+      "id": 5,
+      "desc": "Extreme sports",
+      "tags": [
+        "extreme_sports"
+      ]
+    },
+    {
+      "id": 6,
+      "desc": "Just walking",
+      "tags": [
+        "relax",
+        "adventure",
+        "nature"
+      ]
+    }
+  ],
+  "tags": {
+    "relax": {
+    },
+    "adventure": {
+    },
+    "nature": {
+    },
+    "city": {
+    },
+    "busy": {
+    },
+    "business": {
+    }
+  }
+}
