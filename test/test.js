@@ -1,9 +1,22 @@
 var assert = require('assert');
 
-describe('Array', function() {
-    describe('#indexOf()', function() {
-        it('should return -1 when the value is not present', function() {
-            assert.equal([1, 2, 3].indexOf(4), -1);
-        });
+describe('Questionnaire', function () {
+    it('should only contain answers', function () {
+
+
+    });
+});
+
+describe('Answer', function () {
+    it('should parse JSON to a valid answer', function () {
+
+
+    });
+});
+
+describe('AnswerList', function () {
+    it('should only contain answers', function () {
+
+
     });
 });

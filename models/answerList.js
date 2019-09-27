@@ -17,6 +17,19 @@ class AnswerList {
     }
 
     /**
+     * Get answer by ID
+     * @param id
+     */
+    find(id) {
+        for(let i in this.answers) {
+            if(this.answers[i].id === id) {
+                return this.answers[i];
+            }
+        }
+        return null;
+    }
+
+    /**
      * Add an answer
      * @param answer The answer to add to the list
      */

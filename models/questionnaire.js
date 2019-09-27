@@ -10,6 +10,8 @@ const TagList = require('./tagList');
 
 class Questionnaire {
 
+
+
     /**
      *
      * @param json The JSON source of all the questions
@@ -109,16 +111,14 @@ class Questionnaire {
 
     /**
      * Get a question related to the given answers
-     * @param answer
+     * TODO: Fix the function name
+     *
+     * @param answerId The ID of the given answer
      */
-    getCurrentQuestion(answer) {
+    processAnswer(answerId) {
+        let answer = this.answerList.find(answerId);
 
-        //test
-        answer = this.answerList.all()[3];
-        console.log(answer);
-        //end test
-
-        if (answer !== null || typeof answer !== 'undefined') {
+        if (!(answer === null || typeof answer === 'undefined')) {
             try {
                 // Set the given answer to the given-answer list
                 this.answerList.addGivenAnswer(answer);
@@ -128,7 +128,6 @@ class Questionnaire {
                     let tag = this.tagList.find(answer.tags[id]);
                     tag.count++;
                 }
-
             } catch (e) {
                 // TODO: Maybe throw error forward to user in json?
                 console.error(e);
@@ -136,18 +135,16 @@ class Questionnaire {
         } else {
             console.log('No answer given');
 
+
             return;
         }
 
-        // Change stream input
 
-
-        // Send new question (_basedOn)
+        // Send next question
 
 
 
 
-        console.table(this.tagList.all());
 
     }
 

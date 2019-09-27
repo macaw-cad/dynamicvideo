@@ -6,6 +6,9 @@
       "answers": [
         1,
         2
+      ],
+      "based_on": [
+        "relax"
       ]
     },
     {
@@ -27,7 +30,7 @@
         6
       ],
       "based_on": [
-        "adventure"
+        "busy"
       ]
     }
   ],

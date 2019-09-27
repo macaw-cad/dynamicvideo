@@ -44,6 +44,15 @@ class TagList {
            }
        }
     }
+
+    getBestTag() {
+        // Sort them
+        this.tags.sort((a,b) => (a.count > b.count) ? -1 : ((b.count > a.count) ? 1 : 0));
+
+        // Return first one (with most count)
+        return this.tags[0];
+    }
+
 }
 
 module.exports = TagList;
