@@ -12,12 +12,8 @@ class TagList {
         this._tags = tags;
     }
 
-    addTag(tag) {
-        this.tags.push(tag);
-    }
-
     get tags() {
-        if(typeof this._tags === "undefined") {
+        if (typeof this._tags === "undefined") {
             this._tags = [];
         }
 
@@ -28,6 +24,11 @@ class TagList {
         this._tags = a;
     }
 
+    /**
+     * Get all the tags
+     *
+     * @returns array All available tags
+     */
     all() {
         return this.tags;
     }
@@ -38,19 +39,37 @@ class TagList {
      * @param title
      */
     find(title) {
-       for(let tag in this.tags) {
-           if(this.tags[tag].title === title) {
-               return this.tags[tag];
-           }
-       }
+        for (let tag in this.tags) {
+            if (this.tags[tag].title === title) {
+                return this.tags[tag];
+            }
+        }
     }
 
+    /**
+     * Get the best available tag
+     *
+     * @returns {Tag} The best tag available
+     */
     getBestTag() {
         // Sort them
-        this.tags.sort((a,b) => (a.count > b.count) ? -1 : ((b.count > a.count) ? 1 : 0));
+        this.tags.sort((a, b) => (a.count > b.count) ? -1 : ((b.count > a.count) ? 1 : 0));
 
         // Return first one (with most count)
         return this.tags[0];
+    }
+
+    addTag(tag) {
+        // Don't add the tag if the tag is already in the list.
+        for (let t in this.tags) {
+            if (this.tags[t].title === tag.title) {
+                // Notify in console
+                console.log('Tag "' + tag.title + '" is a duplicate, it will not be added again.');
+                return;
+            }
+        }
+
+        this.tags.push(tag);
     }
 
 }

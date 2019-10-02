@@ -1,8 +1,41 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
+// bg colors
+$bg-dark-grey: #222;
+
+// txt colors
+$txt-white: #f2f2f2;
+
+// fonts - import
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+// fonts - declaration
+$ff-primary: 'Open Sans';
+
+* {
+  box-sizing: border-box;
 }
 
-a {
-  color: #00B7FF
+body {
+  padding: 0;
+  margin: 0;
+  font-family: $ff-primary;
+  background: $bg-dark-grey;
+  color: $txt-white;
+}
+
+#question_container {
+
+
+}
+
+
+.answer {
+
+  &__container {
+
+  }
+
+  &__button {
+
+  }
+
 }

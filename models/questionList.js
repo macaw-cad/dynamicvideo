@@ -26,23 +26,14 @@ class QuestionList {
      * @returns {null|*}
      */
     findByBasedOn(basedOn) {
-        console.log("basedon:", basedOn);
-        for (let q in this.questions) {
-            console.log("question:", this.questions[q]);
-
-            for (let bo in this.questions[q].basedOn) {
-                // loop through _basedOn field of question
-                console.log("basedOn:", this.questions[q].basedOn[bo]);
-
-                if (this.questions[q].basedOn[bo] === basedOn) {
-
-                    // OK SO: maybe there are multiple questions
-                    return this.questions[q];
-                }
-            }
-        }
-        return null;
+        return this.questions.filter(q => {
+            return (typeof q.basedOn !== 'undefined') ? q.basedOn.includes(basedOn) : false;
+        }) || null;
     }
+
+    /**
+     * Getters & setters
+     */
 
     get questions() {
         if (typeof this._questions === "undefined") {
@@ -57,6 +48,10 @@ class QuestionList {
     }
 
     get givenQuestions() {
+        if (typeof this._givenQuestions === "undefined") {
+            this._givenQuestions = [];
+        }
+
         return this._givenQuestions;
     }
 

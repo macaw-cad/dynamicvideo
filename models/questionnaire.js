@@ -11,7 +11,6 @@ const TagList = require('./tagList');
 class Questionnaire {
 
 
-
     /**
      *
      * @param json The JSON source of all the questions
@@ -24,31 +23,6 @@ class Questionnaire {
         this.generateQuestionList();
     }
 
-    /**
-     *
-     * @returns AnswerList
-     */
-    get answerList() {
-        return this._answerList;
-    }
-
-    /**
-     *
-     * @returns QuestionList
-     */
-    get questionList() {
-        return this._questionList;
-    }
-
-    /**
-     *
-     * @returns QuestionList
-     */
-    get tagList() {
-        return this._tagList;
-    }
-
-
     generateQuestionList() {
         let file = fs.readFile('seeders/data.json', 'utf8', (e, string) => {
             if (e) {
@@ -58,7 +32,7 @@ class Questionnaire {
 
             this.parseJsonToQuestions(JSON.parse(string).questions);
             this.parseJsonToAnswers(JSON.parse(string).answers);
-            this.parseJsonToTags(JSON.parse(string).tags);
+            this.parseJsonToTags(JSON.parse(string).answers);
         });
     }
 
@@ -74,7 +48,6 @@ class Questionnaire {
         } else {
             console.error('No questions found in JSON file! TODO GOOD LOGGING');
         }
-        // console.table(this.questionList.all());
     }
 
     /**
@@ -89,24 +62,33 @@ class Questionnaire {
         } else {
             console.error('No answers found in JSON file! TODO GOOD LOGGING');
         }
-
-        // console.table(this.answerList.all());
     }
 
     /**
      * Parse json to tags
-     * @param tags in JSON format
+     * Get all the tags from the available answers
+     *
+     * @param answers in JSON format, so we can extract all the tags
      */
-    parseJsonToTags(tags) {
-        if ('undefined' !== typeof tags) {
-            for (let a in tags) {
-                this.tagList.addTag(new Tag(tags[a]));
+    parseJsonToTags(answers) {
+        if ('undefined' !== typeof answers) {
+            let i = 0;
+
+            for (let a in answers) {
+                for (let t in answers[a].tags) {
+                    if ('undefined' === typeof answers[a].tags[t]) {
+                        console.error('No tags found in answer "' + answers[a].desc + '"')
+                    }
+
+
+                    let rawTag = {"id": i++, "title": answers[a].tags[t]}
+
+                    this.tagList.addTag(new Tag(rawTag));
+                }
             }
         } else {
-            console.error('No tags found in JSON file! TODO GOOD LOGGING');
+            console.error('No answers found in JSON file! TODO GOOD LOGGING');
         }
-
-        // console.table(this.tagList.all());
     }
 
     /**
@@ -143,10 +125,39 @@ class Questionnaire {
         // Send next question
 
 
-
-
-
     }
+
+    /**
+     * Getters & setters
+     */
+
+
+
+    /**
+     *
+     * @returns AnswerList
+     */
+    get answerList() {
+        return this._answerList;
+    }
+
+    /**
+     *
+     * @returns QuestionList
+     */
+    get questionList() {
+        return this._questionList;
+    }
+
+    /**
+     *
+     * @returns QuestionList
+     */
+    get tagList() {
+        return this._tagList;
+    }
+
+
 
 
 }

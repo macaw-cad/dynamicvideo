@@ -15,6 +15,34 @@ class Answer {
 
     }
 
+
+    _parse(json) {
+        this._id = json.id;
+        this._description = json.desc;
+        this._tags = json.tags;
+
+        this._isValid();
+    }
+
+    _isValid() {
+        for (const prop in this._requiredFields) {
+            if (typeof this[this._requiredFields[prop]] === 'undefined') {
+
+                // Throw error if field is undefined
+                throw Error(this._requiredFields[prop] + " is not set on answer " + this._id);
+            } else if (Array.isArray(this[this._requiredFields[prop]]) &&
+                this[this._requiredFields[prop]].length === 0) {
+
+                // If the field is an array, throw an error if the length is 0
+                throw Error("Empty array in answer " + this._id);
+            }
+        }
+    }
+
+    /**
+     * Getters & setters
+     */
+
     get id() {
         return this._id;
     }
@@ -37,27 +65,6 @@ class Answer {
 
     set tags(list) {
         this._tags = list;
-    }
-
-
-    _parse(json) {
-        this._id = json.id;
-        this._description = json.desc;
-        this._tags = json.tags;
-
-        this._isValid();
-    }
-
-    _isValid() {
-        for (const prop in this._requiredFields) {
-            if (typeof this[this._requiredFields[prop]] === 'undefined') {
-                throw Error(this._requiredFields[prop] + " is not set on answer " + this._id);
-            } else if (Array.isArray(this[this._requiredFields[prop]]) &&
-                this[this._requiredFields[prop]].length === 0) {
-                // Check if there are empty arrays in the _tags field
-                throw Error("No tags available in answer " + this._id);
-            }
-        }
     }
 }
 

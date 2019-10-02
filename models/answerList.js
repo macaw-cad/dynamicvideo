@@ -9,6 +9,10 @@ class AnswerList {
     }
 
     /**
+     * Getters & Setters
+     */
+
+    /**
      * Get all available answers
      * @returns {array} with all available answers
      */
@@ -21,12 +25,15 @@ class AnswerList {
      * @param id
      */
     find(id) {
-        for(let i in this.answers) {
-            if(this.answers[i].id === id) {
-                return this.answers[i];
-            }
+        if (Array.isArray(id)) {
+            return this.answers.filter(a => {
+                return id.includes(a.id);
+            });
+        } else {
+            return this.answers.find(a => {
+                return id === a.id;
+            });
         }
-        return null;
     }
 
     /**
@@ -42,7 +49,6 @@ class AnswerList {
      * @param answer The answer to add to the list
      */
     addGivenAnswer(answer) {
-        console.log('test');
 
         // check if the answer is already in the list
         if (!this.givenAnswers.includes(answer)) {
@@ -52,14 +58,11 @@ class AnswerList {
         }
     }
 
-    /**
-     * Getters & Setters
-     */
 
     /**
-     * Get all available answers
-     * @returns array All available answers
+     * Getters & setters
      */
+
     get answers() {
         if (typeof this._answers === "undefined") {
             this._answers = [];
@@ -68,18 +71,10 @@ class AnswerList {
         return this._answers;
     }
 
-    /**
-     * Set all available answers
-     * @param a A list of answers
-     */
     set answers(a) {
         this._answers = a;
     }
 
-    /**
-     * Get all given answers
-     * @returns {array} All given answers
-     */
     get givenAnswers() {
         if (typeof this._givenAnswers === "undefined") {
             this._givenAnswers = [];
@@ -88,15 +83,9 @@ class AnswerList {
         return this._givenAnswers;
     }
 
-    /**
-     * Set all given answers
-     * @param ga A list with given answers
-     */
     set givenAnswers(ga) {
         this._givenAnswers = ga;
     }
-
-
 }
 
 module.exports = AnswerList;

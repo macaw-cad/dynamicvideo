@@ -1,111 +1,130 @@
 {
   "questions": [
     {
-      "id": 1,
-      "desc": "What do you like more, the city or beautiful nature?",
+      "id": 0,
+      "desc": "Morning! I do not know what to do today. Shall I go to work or take a day off?",
       "answers": [
-        1,
-        2
+        0,
+        1
+      ]
+    },
+    {
+      "id": 1,
+      "desc": "What do you like more, relaxing or doing activities?",
+      "answers": [
+        2,
+        3
       ],
       "based_on": [
-        "relax"
+        "day-off"
       ]
     },
     {
       "id": 2,
-      "desc": "What do you like more, relaxing or doing activities?",
+      "desc": "How should I go to work today?",
       "answers": [
-        3,
-        4
+        4,
+        5
       ],
       "based_on": [
-        "nature"
+        "work"
       ]
     },
     {
-      "id": 3,
-      "desc": "Do you like extreme sports?",
+      "id": 4,
+      "desc": "So, now I'm at work. Let's go!",
       "answers": [
-        5,
-        6
+        6,
+        7
       ],
       "based_on": [
-        "busy"
+        "walking",
+        "public-transport",
+        "activities"
+      ]
+    },
+    {
+      "id": 4,
+      "desc": "Do you like it a little more extreme?",
+      "answers": [
+        8,
+        9
+      ],
+      "based_on": [
+        "relax"
       ]
     }
   ],
   "answers": [
     {
-      "id": 1,
-      "desc": "City",
+      "id": 0,
+      "desc": "Work",
       "tags": [
-        "busy",
-        "city",
-        "business"
+        "work"
+      ]
+    },
+    {
+      "id": 1,
+      "desc": "Take a day off",
+      "tags": [
+        "day-off"
       ]
     },
     {
       "id": 2,
-      "desc": "Nature",
+      "desc": "Doing activities",
       "tags": [
-        "nature"
+        "activities"
       ]
     },
     {
       "id": 3,
-      "desc": "Doing activities",
-      "tags": [
-        "adventure"
-      ]
-    },
-    {
-      "id": 4,
       "desc": "Relax",
       "tags": [
         "relax"
       ]
     },
     {
-      "id": 5,
-      "desc": "Extreme sports",
+      "id": 4,
+      "desc": "With public transport",
       "tags": [
-        "extreme_sports"
+        "public-transport"
       ]
     },
     {
-      "id": 6,
+      "id": 5,
       "desc": "Just walking",
       "tags": [
-        "relax",
-        "adventure",
-        "nature"
+        "walking"
       ]
-    }
-  ],
-  "tags": [
-    {
-      "id": 1,
-      "title": "relax"
-    },
-    {
-      "id": 2,
-      "title": "adventure"
-    },
-    {
-      "id": 3,
-      "title": "nature"
-    },
-    {
-      "id": 4,
-      "title": "city"
-    },
-    {
-      "id": 5,
-      "title": "busy"
     },
     {
       "id": 6,
-      "title": "business"
+      "desc": "Start with some FIFA",
+      "tags": [
+        "fifa"
+      ]
+    },
+    {
+      "id": 7,
+      "desc": "Start working",
+      "tags": [
+        "work-start"
+      ]
+    },
+    {
+      "id": 8,
+      "desc": "Nah",
+      "tags": [
+        "relax"
+      ]
+    },
+    {
+      "id": 9,
+      "desc": "Yeah let's go!",
+      "tags": [
+        "skydive"
+      ]
     }
   ]
 }

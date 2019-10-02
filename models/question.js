@@ -16,8 +16,66 @@ class Question {
             '_answers',
         ];
 
-        this._parse(json);
+        if(json) {
+            this._parse(json);
+        }
     }
+
+    /**
+     * Map the answer ID's to answer objects.
+     *
+     * @param question
+     * @param answers
+     */
+    static mapAnswers(question, answers) {
+
+        // TODO: We need the correct answers as input, otherwise it won't map the answer to the question object
+        question.answers = question.answers.map(function (q) {
+            return answers.find(function (a) {
+                return a.id === q;
+            });
+        });
+    }
+
+
+    /**
+     * Parse JSON to a Question object
+     *
+     * @param json
+     * @private
+     */
+    _parse(json) {
+        this._id = json.id;
+        this._description = json.desc;
+        this._answers = json.answers;
+        this._basedOn = json.based_on;
+
+        this._isValid();
+    }
+
+    /**
+     * Check if the object is valid
+     *
+     * @private
+     */
+    _isValid() {
+        for (const prop in this._requiredFields) {
+            if (typeof this[this._requiredFields[prop]] === 'undefined') {
+
+                // Throw error if field is undefined
+                throw Error(this._requiredFields[prop] + " is not set on question " + this._id);
+            } else if (Array.isArray(this[this._requiredFields[prop]]) &&
+                this[this._requiredFields[prop]].length === 0) {
+
+                // If the field is an array, throw an error if the length is 0
+                throw Error("Empty array in question " + this._id);
+            }
+        }
+    }
+
+    /**
+     * Getters & setters
+     */
 
     get id() {
         return this._id;
@@ -51,28 +109,6 @@ class Question {
         this._basedOn = b;
     }
 
-
-    _parse(json) {
-        this._id = json.id;
-        this._description = json.desc;
-        this._answers = json.answers;
-        this._basedOn = json.based_on;
-
-        this._isValid();
-    }
-
-
-    _isValid() {
-        for (const prop in this._requiredFields) {
-            if (typeof this[this._requiredFields[prop]] === 'undefined') {
-                throw Error(this._requiredFields[prop] + " is not set on question " + this._id);
-            } else if (Array.isArray(this[this._requiredFields[prop]]) &&
-                this[this._requiredFields[prop]].length === 0) {
-                // Check if there are empty arrays in the _answers field
-                throw Error("No answers available for question " + this._id);
-            }
-        }
-    }
 }
 
 module.exports = Question;

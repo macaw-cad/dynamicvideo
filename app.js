@@ -1,9 +1,12 @@
+"use strict";
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var sassMiddleware = require('node-sass-middleware');
+
 var Questionnaire = require('./models/questionnaire');
 
 // Declare OBS & NMS
@@ -77,19 +80,27 @@ let sceneList = [];
 obs.connect({
     address: 'localhost:4444',
     password: ''
-})
-    .then(() => {
-        console.log(`Success! We're connected & authenticated.`);
+}).then(() => {
+    console.log(`Successful connection with OBS`);
 
-        obs.send('GetSceneList').then(function (sl) {
-            for (id in sl.scenes) {
-                sceneList.push(sl.scenes[id].name);
-            }
-        });
+    obs.send('GetSceneList').then(function (sl) {
+        for (let id in sl.scenes) {
+            sceneList.push(sl.scenes[id].name);
+        }
+
+        app.set('sceneList', sceneList);
+    }).catch(function (e) {
+        console.error(e);
     });
+}).catch(function (e) {
+    console.error(e);
+});
+
+// You must add this handler to avoid uncaught exceptions.
+obs.on('error', err => {
+    console.error('socket error:', err);
+});
 
 app.set('obs', obs);
-app.set('sceneList', sceneList);
-
 
 module.exports = app;
