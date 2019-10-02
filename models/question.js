@@ -16,7 +16,7 @@ class Question {
             '_answers',
         ];
 
-        if(json) {
+        if (json) {
             this._parse(json);
         }
     }

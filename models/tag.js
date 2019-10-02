@@ -30,7 +30,7 @@ class Tag {
     }
 
     get count() {
-        if(!this._count) {
+        if (!this._count) {
             return 0;
         }
 

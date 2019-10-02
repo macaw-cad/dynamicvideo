@@ -132,7 +132,6 @@ class Questionnaire {
      */
 
 
-
     /**
      *
      * @returns AnswerList
@@ -156,8 +155,6 @@ class Questionnaire {
     get tagList() {
         return this._tagList;
     }
-
-
 
 
 }

@@ -8,9 +8,9 @@ var apiController = require('../controllers/apiController');
 /* GET home page. */
 router.get('/', indexController.index);
 
-
-router.get('/api/v1/questionnaire', apiController.index);
 router.get('/api/v1/get-question', apiController.getQuestion);
+
+/* POST send answer */
 router.post('/api/v1/send-answer', apiController.sendAnswer);
 
 module.exports = router;
