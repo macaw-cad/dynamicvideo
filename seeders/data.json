@@ -2,7 +2,7 @@
   "questions": [
     {
       "id": 0,
-      "desc": "Morning! I do not know what to do today. Shall I go to work or take a day off?",
+      "desc": "Morning! I don't know what to do today. Shall I go to work or take a day off?",
       "answers": [
         0,
         1
@@ -32,7 +32,7 @@
     },
     {
       "id": 4,
-      "desc": "So, now I'm at work. Let's go!",
+      "desc": "So now I'm at work, what are we going to do first?",
       "answers": [
         6,
         7
@@ -93,14 +93,14 @@
     },
     {
       "id": 5,
-      "desc": "Just walking",
+      "desc": "Be healthy, let's walk.",
       "tags": [
         "walking"
       ]
     },
     {
       "id": 6,
-      "desc": "Start with some FIFA",
+      "desc": "Work hard, play hard. Kick-off with some FIFA.",
       "tags": [
         "fifa"
       ]

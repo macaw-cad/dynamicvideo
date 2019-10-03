@@ -1,14 +1,16 @@
-// bg colors
-$bg-dark-grey: #222;
+$dark-grey: #222;
+$white: #f2f2f2;
 
-// txt colors
-$txt-white: #f2f2f2;
+$yellow: #fbd200;
+$yellow-darker: darken($yellow, 5%);
+
 
 // fonts - import
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Bitter|Assistant');
 
 // fonts - declaration
-$ff-primary: 'Open Sans';
+$ff-primary: 'Assistant';
+$ff-secondary: 'Bitter';
 
 * {
   box-sizing: border-box;
@@ -17,25 +19,62 @@ $ff-primary: 'Open Sans';
 body {
   padding: 0;
   margin: 0;
-  font-family: $ff-primary;
-  background: $bg-dark-grey;
-  color: $txt-white;
+  font-size: 16px;
+  background: $dark-grey;
+  color: $white;
 }
 
-#question_container {
+.container {
+  text-align: center;
 
+  &__title {
+    font-weight: 600;
+    font-family: $ff-secondary;
+    font-size: 2em;
+    margin-bottom: 2em;
+  }
 
+  &__question {
+    font-family: $ff-primary;
+    font-size: 1.4em;
+  }
+
+  &__answers {
+    max-width: 90%;
+    width: 500px;
+    margin: 1em auto;
+  }
 }
 
 
 .answer {
-
-  &__container {
-
-  }
-
   &__button {
+    border: 0;
+    background-color: $yellow;
+    color: $dark-grey;
+    font-family: $ff-primary;
+    font-size: 1.2em;
+    cursor: pointer;
+    line-height: 2em;
+    padding: .5em;
+    margin: .4em 0;
+    transition: .1s;
+    display: block;
+    width: 100%;
 
+    &:hover {
+      transition: .1s;
+      border-radius: .25em;
+      background-color: $yellow-darker;
+    }
   }
+
+}
+
+#video_element {
+  margin: 30px auto 0;
+  width: 90%;
+  box-shadow: 0 21px 26px -5px rgba(0, 0, 0, 0.2), 0 9px 9px -5px rgba(0, 0, 0, 0.05);
+  display: block;
 
 }

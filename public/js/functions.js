@@ -96,7 +96,7 @@ function clearFields() {
  */
 
 if (flvjs.isSupported()) {
-    var videoElement = document.getElementById('videoElement');
+    var videoElement = document.getElementById('video_element');
     var flvPlayer = flvjs.createPlayer({
         type: 'flv',
         url: 'http://localhost:8000/live/test.flv'
