@@ -39,8 +39,7 @@
       ],
       "based_on": [
         "walking",
-        "public-transport",
-        "activities"
+        "public-transport"
       ]
     },
     {
@@ -51,6 +50,7 @@
         9
       ],
       "based_on": [
+        "activities",
         "relax"
       ]
     }

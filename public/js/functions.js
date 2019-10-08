@@ -48,10 +48,17 @@ function xhrChangeListener() {
 
         clearFields();
 
-        appendQuestion(question._description);
 
-        for (let i in question._answers) {
-            appendAnswer(answers[i]._id, answers[i]._description).onclick = buttonListener;
+        if (typeof question !== 'undefined') {
+
+            appendQuestion(question._description);
+
+            for (let i in question._answers) {
+                appendAnswer(answers[i]._id, answers[i]._description).onclick = buttonListener;
+            }
+
+        } else {
+            alert('No question received from server');
         }
     }
 }
