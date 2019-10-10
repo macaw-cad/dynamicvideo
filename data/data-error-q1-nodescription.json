@@ -1,0 +1,66 @@
+{
+  "questions": [
+    {
+      "id": 0,
+      "desc": "What is the answer to question 1?",
+      "answers": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": 1,
+      "answers": [
+        2,
+        3
+      ],
+      "based_on": [
+        "day-off"
+      ]
+    }
+  ],
+  "answers": [
+    {
+      "id": 0,
+      "desc": "Work",
+      "tags": [
+        "work"
+      ]
+    },
+    {
+      "id": 1,
+      "desc": "Take a day off",
+      "tags": [
+        "day-off"
+      ]
+    },
+    {
+      "id": 2,
+      "desc": "Doing activities",
+      "tags": [
+        "activities"
+      ]
+    },
+    {
+      "id": 3,
+      "desc": "Relax",
+      "tags": [
+        "relax"
+      ]
+    },
+    {
+      "id": 4,
+      "desc": "With public transport",
+      "tags": [
+        "public-transport"
+      ]
+    },
+    {
+      "id": 5,
+      "desc": "Be healthy, let's walk.",
+      "tags": [
+        "walking"
+      ]
+    }
+  ]
+}
