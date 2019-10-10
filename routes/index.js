@@ -8,6 +8,7 @@ var apiController = require('../controllers/apiController');
 /* GET home page. */
 router.get('/', indexController.index);
 
+/* GET get the first question */
 router.get('/api/v1/get-question', apiController.getQuestion);
 
 /* POST send answer */

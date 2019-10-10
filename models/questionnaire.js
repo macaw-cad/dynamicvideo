@@ -15,32 +15,36 @@ class Questionnaire {
      *
      * @param json The JSON source of all the questions
      */
-    constructor(json) {
+    constructor() {
         this._questionList = new QuestionList();
         this._answerList = new AnswerList();
         this._tagList = new TagList();
-
-        this.generateQuestionList();
     }
 
-    generateQuestionList() {
-        let file = fs.readFile('seeders/data.json', 'utf8', (e, string) => {
-            if (e) {
-                console.log("Error reading file", e);
-                return;
-            }
+    generateQuestionList(filepath) {
+        let text = null;
+        // Read from the file, synchronous
+        try {
+            text = fs.readFileSync(filepath, 'utf8');
+        } catch (e) {
+            throw Error('Couldn\'t read the file ' + filepath);
+        }
 
-            this.parseJsonToQuestions(JSON.parse(string).questions);
-            this.parseJsonToAnswers(JSON.parse(string).answers);
-            this.parseJsonToTags(JSON.parse(string).answers);
-        });
+        if (text) {
+            try {
+                this.json = JSON.parse(text);
+            } catch (e) {
+                throw Error('Couldn\'t parse the JSON');
+            }
+        }
     }
 
     /**
      * Parse json to questions
-     * @param questions in JSON format
      */
-    parseJsonToQuestions(questions) {
+    parseJsonToQuestions() {
+        const questions = this.json.questions;
+
         if ('undefined' !== typeof questions) {
             for (let q in questions) {
                 this.questionList.addQuestion(new Question(questions[q]));
@@ -54,7 +58,9 @@ class Questionnaire {
      * Parse json to answers
      * @param answers in JSON format
      */
-    parseJsonToAnswers(answers) {
+    parseJsonToAnswers() {
+        const answers = this.json.answers;
+
         if ('undefined' !== typeof answers) {
             for (let a in answers) {
                 this.answerList.addAnswer(new Answer(answers[a]));
@@ -67,10 +73,11 @@ class Questionnaire {
     /**
      * Parse json to tags
      * Get all the tags from the available answers
-     *
-     * @param answers in JSON format, so we can extract all the tags
      */
-    parseJsonToTags(answers) {
+    parseJsonToTags() {
+        const answers = this.json.answers;
+
+
         if ('undefined' !== typeof answers) {
             let i = 0;
 
@@ -154,6 +161,14 @@ class Questionnaire {
      */
     get tagList() {
         return this._tagList;
+    }
+
+    get json() {
+        return this._json;
+    }
+
+    set json(value) {
+        this._json = value;
     }
 
 

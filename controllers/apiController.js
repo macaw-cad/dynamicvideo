@@ -1,10 +1,13 @@
 /**
  *
- * @param obs
+ * @param stream
  * @param questionnaire
  * @returns {{question: *, success: *, answers: *, message: *}}
  */
-function returnFirstQuestion(obs, questionnaire) {
+const StreamHelper = require("../models/streamHelper");
+
+
+function returnFirstQuestion(stream, questionnaire) {
     let success = true;
     let msg = '';
 
@@ -12,13 +15,13 @@ function returnFirstQuestion(obs, questionnaire) {
     let fqAnswers = questionnaire.answerList.find(firstQuestion.answers);
 
     // Set the default scene
-    obs.send('SetCurrentScene', {
-        'scene-name': 'default'
-    }).catch(function (e) {
-        console.error(e);
-        success = false;
-        msg = e.description;
-    });
+    try {
+        StreamHelper.setScene(stream, 'default')
+    } catch(e) {
+            console.error(e);
+            success = false;
+            msg = e.description;
+    }
 
     return {
         success: success,
@@ -35,11 +38,11 @@ function returnFirstQuestion(obs, questionnaire) {
  * @param res
  */
 exports.getQuestion = function (req, res) {
-    // Get the global OBS and Scenelist instances
-    let obs = req.app.get('obs');
+    // Get the global stream and Scenelist instances
+    let stream = req.app.get('stream');
     let questionnaire = req.app.get('questionnaire');
 
-    res.json(returnFirstQuestion(obs, questionnaire));
+    res.json(returnFirstQuestion(stream, questionnaire));
 };
 
 /**
@@ -49,8 +52,8 @@ exports.getQuestion = function (req, res) {
  */
 exports.sendAnswer = function (req, res) {
 
-    // Get the global OBS and Scenelist instances
-    let obs = req.app.get('obs');
+    // Get the global stream and Scenelist instances
+    let stream = req.app.get('stream');
     let sceneList = req.app.get('sceneList');
 
     /** @type {Questionnaire} */
@@ -61,11 +64,11 @@ exports.sendAnswer = function (req, res) {
     let msg = '';
 
     if (typeof rawAnswerId === 'undefined') {
-        res.json(returnFirstQuestion(obs, questionnaire));
+        res.json(returnFirstQuestion(stream, questionnaire));
         return;
     }
 
-    // TODO: check if obs/scenelist is set (correct)
+    // TODO: check if stream/scenelist is set (correct)
     // TODO: check if answer is given, otherwise give user (browser) feedback
     const answerId = parseInt(rawAnswerId);
 
@@ -75,20 +78,24 @@ exports.sendAnswer = function (req, res) {
     const tag = answer.tags[0];
 
     let nextQuestion = questionnaire.questionList.findByBasedOn(tag);
+    let nqAnswers = null;
 
     if (Array.isArray(nextQuestion) && nextQuestion.length === 1) {
         nextQuestion = nextQuestion[0];
+        nqAnswers = questionnaire.answerList.find(nextQuestion.answers);
+    } else if (nextQuestion.length === 0) {
+
+        // TODO Find a nice fix for this
+        msg = 'No question found';
+        console.warn(msg);
+        nextQuestion = null;
+        success = false;
     } else {
         // TODO: Find nice fix for this
         nextQuestion = nextQuestion[0];
-        console.warn('Multiple questions found. Currently picking only the first one.')
-    }
 
-    let nqAnswers = null;
-    if (nextQuestion) {
-        nqAnswers = questionnaire.answerList.find(nextQuestion.answers);
-    } else {
-        console.warn('No question found');
+        msg = 'Multiple questions found. Currently picking only the first one.';
+        console.warn(msg);
     }
 
 
@@ -102,13 +109,13 @@ exports.sendAnswer = function (req, res) {
     for (let s in sceneList) {
         // Check if the tag meets the scene from the scenelist
         if (sceneList[s] === tag) {
-            obs.send('SetCurrentScene', {
-                'scene-name': sceneList[s]
-            }).catch(function (e) {
+            try {
+                StreamHelper.setScene(stream, sceneList[s]);
+            } catch(e) {
                 console.error(e);
                 success = false;
                 msg = e.description;
-            });
+            }
             found = true;
             break;
         }
@@ -117,7 +124,6 @@ exports.sendAnswer = function (req, res) {
     if (!found) {
         msg = 'No suitable scene found for tag ' + tag;
         console.log("\x1b[31m%s\x1b[0m", msg);
-
     }
 
     // return with new question, based on the answer from the client

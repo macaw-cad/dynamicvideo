@@ -1,5 +1,6 @@
 "use strict";
 
+var env = require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -7,12 +8,11 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var sassMiddleware = require('node-sass-middleware');
 
+const StreamHelper = require("./models/streamHelper");
 var Questionnaire = require('./models/questionnaire');
 
-// Declare OBS & NMS
-const OBSWebSocket = require('obs-websocket-js');
+// Declare NMS
 const NodeMediaServer = require('node-media-server');
-
 var indexRouter = require('./routes/index');
 
 var app = express();
@@ -52,20 +52,27 @@ app.use(function (err, req, res, next) {
 });
 
 // Create a global questionnaire
-app.set('questionnaire', new Questionnaire());
+let q = new Questionnaire();
+console.log(q.generateQuestionList('data/data.json'));
+
+q.parseJsonToQuestions();
+q.parseJsonToAnswers();
+q.parseJsonToTags();
+
+app.set('questionnaire', q);
 
 
 // Start mediaserver
 const nmsConfig = {
     rtmp: {
-        port: 1935,
-        chunk_size: 60000,
+        port: process.env.RTMP_PORT,
+        chunk_size: process.env.RTMP_CHUNK_SIZE,
         gop_cache: true,
-        ping: 30,
+        ping: process.env.RTMP_PING,
         ping_timeout: 60
     },
     http: {
-        port: 8000,
+        port: process.env.HTTP_PORT,
         allow_origin: '*'
     }
 };
@@ -73,34 +80,7 @@ const nmsConfig = {
 var nms = new NodeMediaServer(nmsConfig);
 nms.run();
 
-// Connect to OBS websocket
-const obs = new OBSWebSocket();
-let sceneList = [];
 
-obs.connect({
-    address: 'localhost:4444',
-    password: ''
-}).then(() => {
-    console.log(`Successful connection with OBS`);
-
-    obs.send('GetSceneList').then(function (sl) {
-        for (let id in sl.scenes) {
-            sceneList.push(sl.scenes[id].name);
-        }
-
-        app.set('sceneList', sceneList);
-    }).catch(function (e) {
-        console.error(e);
-    });
-}).catch(function (e) {
-    console.error(e);
-});
-
-// You must add this handler to avoid uncaught exceptions.
-obs.on('error', err => {
-    console.error('socket error:', err);
-});
-
-app.set('obs', obs);
+app.set('stream', StreamHelper.initStream(app));
 
 module.exports = app;

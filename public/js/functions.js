@@ -17,12 +17,15 @@ init();
  *
  */
 function init() {
-    xhttp.open("get", "/api/v1/get-question", true);
+    xhttp.open("GET", "/api/v1/get-question", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     // When there is an ajax call, the xhrChangeListener will be fired
     xhttp.onreadystatechange = xhrChangeListener;
     xhttp.send();
+
+    // Init the video
+    initVideo();
 }
 
 /**
@@ -42,6 +45,8 @@ function xhrChangeListener() {
         const json = JSON.parse(this.response);
         const question = json.question;
         const answers = json.answers;
+        const success = json.success;
+        const message = json.message;
 
         // todo check if json is valid
 
@@ -49,7 +54,7 @@ function xhrChangeListener() {
         clearFields();
 
 
-        if (typeof question !== 'undefined') {
+        if (typeof question !== 'undefined' && success) {
 
             appendQuestion(question._description);
 
@@ -58,7 +63,8 @@ function xhrChangeListener() {
             }
 
         } else {
-            alert('No question received from server');
+            // TODO Make this user friendly
+            alert(message);
         }
     }
 }
@@ -93,6 +99,9 @@ function appendAnswer(id, title) {
     return answersContainer.appendChild(a);
 }
 
+/**
+ * Clear all the fields
+ */
 function clearFields() {
     questionContainer.innerHTML = '';
     answersContainer.innerHTML = '';
@@ -101,14 +110,20 @@ function clearFields() {
 /**
  * Video
  */
+function initVideo() {
 
-if (flvjs.isSupported()) {
-    var videoElement = document.getElementById('video_element');
-    var flvPlayer = flvjs.createPlayer({
-        type: 'flv',
-        url: 'http://localhost:8000/live/test.flv'
-    });
-    flvPlayer.attachMediaElement(videoElement);
-    flvPlayer.load();
-    flvPlayer.play();
+    // TODO make this robust
+    // TODO fix URL
+
+    if (flvjs.isSupported()) {
+        const videoElement = document.getElementById('video_element');
+        const flvPlayer = flvjs.createPlayer({
+            type: 'flv',
+            url: 'http://localhost:8000/live/test.flv'
+        });
+        flvPlayer.attachMediaElement(videoElement);
+        flvPlayer.load();
+        flvPlayer.play();
+    }
 }
+

@@ -8,7 +8,7 @@ class Question {
      * @param json The question in JSON format
      */
     constructor(json) {
-        // fuck this
+        // private variables
         // https://stackoverflow.com/questions/22528967/es6-class-variable-alternatives
         this._requiredFields = [
             '_id',
