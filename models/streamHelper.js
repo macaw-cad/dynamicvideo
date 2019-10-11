@@ -10,10 +10,9 @@ class StreamHelper {
     constructor() {
     }
 
-    static initStream(app) {
+    static initStream() {
         // Connect to OBS websocket
         const obs = new OBSWebSocket();
-        let sceneList = [];
 
         obs.connect({
             address: process.env.OBS_ADDRESS + ':' + process.env.OBS_PORT,
@@ -21,15 +20,7 @@ class StreamHelper {
         }).then(() => {
             console.log(`Successful connection with OBS`);
 
-            obs.send('GetSceneList').then(function (sl) {
-                for (let id in sl.scenes) {
-                    sceneList.push(sl.scenes[id].name);
-                }
-
-                app.set('sceneList', sceneList);
-            }).catch(function (e) {
-                console.error(e);
-            });
+            StreamHelper.getSceneList(obs);
         }).catch(function (e) {
             console.error(e);
         });
@@ -40,6 +31,38 @@ class StreamHelper {
         });
 
         return obs;
+    }
+
+    static getSceneList(obs) {
+        let sceneList = [];
+
+        obs.send('GetSceneList').then(function (sl) {
+            for (let id in sl.scenes) {
+                sceneList.push(sl.scenes[id].name);
+            }
+        }).catch(function (e) {
+            console.error(e);
+        });
+
+        return sceneList;
+    }
+
+    static changeScene(obs) {
+        const sceneList = StreamHelper.getSceneList(obs);
+
+        for (let s in sceneList) {
+            // Check if the tag meets the scene from the scenelist
+            if (sceneList[s] === tag) {
+                try {
+                    StreamHelper.setScene(obs, sceneList[s]);
+                    return true;
+                } catch(e) {
+                    throw e;
+                }
+            }
+        }
+
+        return false;
     }
 
 

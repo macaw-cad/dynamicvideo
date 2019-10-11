@@ -17,10 +17,10 @@ function returnFirstQuestion(stream, questionnaire) {
     // Set the default scene
     try {
         StreamHelper.setScene(stream, 'default')
-    } catch(e) {
-            console.error(e);
-            success = false;
-            msg = e.description;
+    } catch (e) {
+        console.error(e);
+        success = false;
+        msg = e.description;
     }
 
     return {
@@ -54,7 +54,6 @@ exports.sendAnswer = function (req, res) {
 
     // Get the global stream and Scenelist instances
     let stream = req.app.get('stream');
-    let sceneList = req.app.get('sceneList');
 
     /** @type {Questionnaire} */
     let questionnaire = req.app.get('questionnaire');
@@ -105,20 +104,13 @@ exports.sendAnswer = function (req, res) {
     // let bestTag = questionnaire.tagList.getBestTag();
 
     let found = false;
-    // Change current scene
-    for (let s in sceneList) {
-        // Check if the tag meets the scene from the scenelist
-        if (sceneList[s] === tag) {
-            try {
-                StreamHelper.setScene(stream, sceneList[s]);
-            } catch(e) {
-                console.error(e);
-                success = false;
-                msg = e.description;
-            }
-            found = true;
-            break;
-        }
+
+    try {
+        found = StreamHelper.changeScene(stream, tag);
+    } catch (e) {
+        console.error(e);
+        success = false;
+        msg = e.description;
     }
 
     if (!found) {
