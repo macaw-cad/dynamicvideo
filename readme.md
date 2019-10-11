@@ -1,5 +1,6 @@
+[![Build status](https://dev.azure.com/MacawInteractive/DynamicVideo/_apis/build/status/DynamicVideo-CI)](https://dev.azure.com/MacawInteractive/DynamicVideo/_build/latest?definitionId=15)
 #Dynamic Video
-This is a proof of concept which shows the possibilities for changing a streaming video on the server from the browser.
+> A proof of concept which shows the possibilities for changing a streaming video on the server directly from the browser.
 
 ## Features
 
