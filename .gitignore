@@ -66,3 +66,6 @@ typings/
 # Generated plain CSS files
 public/stylesheets/style.css
 public/stylesheets/style.css.map
+
+# Test results
+tests/*.xml
