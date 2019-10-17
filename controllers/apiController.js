@@ -23,6 +23,9 @@ function returnFirstQuestion(stream, questionnaire) {
         msg = e.description;
     }
 
+    // Now start the stream
+    StreamHelper.startStreaming(stream);
+
     return {
         success: success,
         message: msg,

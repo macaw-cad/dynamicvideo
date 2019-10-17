@@ -6,7 +6,7 @@ describe('Questionnaire', function () {
 
     it('should parse json', function() {
         try {
-            q.generateQuestionList('data/data-error-q1-nodescription.json');
+            q.parseFileToJson('data/data-error-q1-nodescription.json');
             assert.ok('Works as expected.');
         } catch(e) {
             assert.fail('Couldn\'t parse JSON file');
@@ -15,7 +15,7 @@ describe('Questionnaire', function () {
 
     it('should not parse json when source file is corrupt', function() {
         try {
-            q.generateQuestionList('data/data-error-parse.json');
+            q.parseFileToJson('data/data-error-parse.json');
             assert.fail('Shouldn\'t pass this function');
         } catch(e) {
             assert.deepStrictEqual(e, Error('Couldn\'t parse the JSON'));
@@ -25,8 +25,8 @@ describe('Questionnaire', function () {
     it('should throw error when file does not exist', function() {
         let filepath = 'path-doesnt-exist';
         try {
-            q.generateQuestionList(filepath);
-            assert.ok('Works as expected.');
+            q.parseFileToJson(filepath);
+            assert.fail('Shouldn\'t pass this function');
         } catch(e) {
             assert.deepStrictEqual(e, Error('Couldn\'t read the file ' + filepath));
         }

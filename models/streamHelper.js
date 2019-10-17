@@ -36,19 +36,32 @@ class StreamHelper {
     static getSceneList(obs) {
         let sceneList = [];
 
-        obs.send('GetSceneList').then(function (sl) {
+        return obs.send('GetSceneList').then(function (sl) {
             for (let id in sl.scenes) {
                 sceneList.push(sl.scenes[id].name);
             }
+
+            return sceneList;
         }).catch(function (e) {
             console.error(e);
         });
-
-        return sceneList;
     }
 
-    static changeScene(obs) {
-        const sceneList = StreamHelper.getSceneList(obs);
+    static startStreaming(obs) {
+        obs.sendCallback('StartStreaming', (error) => {
+            console.error(error);
+        });
+    }
+
+    /**
+     *
+     *
+     * @param obs
+     * @param tag
+     * @returns {Promise<boolean>}
+     */
+    static async changeScene(obs, tag) {
+        const sceneList = await StreamHelper.getSceneList(obs);
 
         for (let s in sceneList) {
             // Check if the tag meets the scene from the scenelist
@@ -56,7 +69,7 @@ class StreamHelper {
                 try {
                     StreamHelper.setScene(obs, sceneList[s]);
                     return true;
-                } catch(e) {
+                } catch (e) {
                     throw e;
                 }
             }
@@ -69,8 +82,8 @@ class StreamHelper {
     static setScene(obs, name) {
         obs.send('SetCurrentScene', {
             'scene-name': name
-        }).catch(function(e) {
-           throw e;
+        }).catch(function (e) {
+            throw e;
         });
     }
 
