@@ -21,10 +21,11 @@ class Questionnaire {
         this._tagList = new TagList();
     }
 
-    generateQuestionList(filepath) {
+    parseFileToJson(filepath) {
         let text = null;
-        // Read from the file, synchronous
+
         try {
+            // Read from the file, synchronous
             text = fs.readFileSync(filepath, 'utf8');
         } catch (e) {
             throw Error('Couldn\'t read the file ' + filepath);

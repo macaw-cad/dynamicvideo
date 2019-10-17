@@ -31,6 +31,7 @@ app.use(sassMiddleware({
     indentedSyntax: false, // true = .sass and false = .scss
     sourceMap: true
 }));
+app.use(express.static(path.join(__dirname, '/node_modules/flv.js/dist/')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
@@ -53,8 +54,9 @@ app.use(function (err, req, res, next) {
 
 // Create a global questionnaire
 let q = new Questionnaire();
-console.log(q.generateQuestionList('data/data.json'));
+q.parseFileToJson('data/data.json');
 
+// Parse the JSON to objects
 q.parseJsonToQuestions();
 q.parseJsonToAnswers();
 q.parseJsonToTags();
