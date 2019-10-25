@@ -29,3 +29,19 @@ There are different environment variables you can set. The variables are located
 
 ## Data
 The data is provided in the `data` folder. The main data file is `data.json`, while the other files are there for test purposes.
+
+## Videos
+The videos are stored in the `video` folder with the following file structure:
+- category-name
+    - 1.mp4
+    - 2.mp4
+    - 3.mp4
+- category-name
+    - 1.mp4
+    - ....
+- root.txt
+- nest.txt
+
+At the moment of writing, subdirectories within the category folders are not supported.
+The `category-name` names have to be the same as the tags used in the data.json.
+The content of `root.txt` will remain the same, while `nest.txt` will be changed when the scenes will switch.

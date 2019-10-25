@@ -8,12 +8,12 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var sassMiddleware = require('node-sass-middleware');
 
-const StreamHelper = require("./models/streamHelper");
 var Questionnaire = require('./models/questionnaire');
 
 // Declare NMS
 const NodeMediaServer = require('node-media-server');
 var indexRouter = require('./routes/index');
+const StreamHelper = require("./models/streamHelper");
 
 var app = express();
 
@@ -31,6 +31,7 @@ app.use(sassMiddleware({
     indentedSyntax: false, // true = .sass and false = .scss
     sourceMap: true
 }));
+
 app.use(express.static(path.join(__dirname, '/node_modules/flv.js/dist/')));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -63,7 +64,6 @@ q.parseJsonToTags();
 
 app.set('questionnaire', q);
 
-
 // Start mediaserver
 const nmsConfig = {
     rtmp: {
@@ -79,10 +79,13 @@ const nmsConfig = {
     }
 };
 
+
+global.rootDirectory = __dirname;
+
+
 var nms = new NodeMediaServer(nmsConfig);
 nms.run();
 
-
-app.set('stream', StreamHelper.initStream(app));
+// app.set('stream', StreamHelper.initStream(app));
 
 module.exports = app;

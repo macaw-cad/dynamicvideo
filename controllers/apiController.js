@@ -16,7 +16,7 @@ function returnFirstQuestion(stream, questionnaire) {
 
     // Set the default scene
     try {
-        StreamHelper.setScene(stream, 'default')
+        StreamHelper.changeScene('default')
     } catch (e) {
         console.error(e);
         success = false;
@@ -24,7 +24,7 @@ function returnFirstQuestion(stream, questionnaire) {
     }
 
     // Now start the stream
-    StreamHelper.startStreaming(stream);
+    StreamHelper.startStreaming();
 
     return {
         success: success,
@@ -109,7 +109,7 @@ exports.sendAnswer = function (req, res) {
     let found = false;
 
     try {
-        found = StreamHelper.changeScene(stream, tag);
+        found = StreamHelper.changeScene(tag);
     } catch (e) {
         console.error(e);
         success = false;

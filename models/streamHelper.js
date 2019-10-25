@@ -1,6 +1,7 @@
 "use strict";
 
-const OBSWebSocket = require('obs-websocket-js');
+var fs = require("fs");
+let ffmpeg = require('fluent-ffmpeg');
 
 class StreamHelper {
 
@@ -11,82 +12,107 @@ class StreamHelper {
     }
 
     static initStream() {
-        // Connect to OBS websocket
-        const obs = new OBSWebSocket();
-
-        obs.connect({
-            address: process.env.OBS_ADDRESS + ':' + process.env.OBS_PORT,
-            password: process.env.OBS_PASSWORD
-        }).then(() => {
-            console.log(`Successful connection with OBS`);
-
-            StreamHelper.getSceneList(obs);
-        }).catch(function (e) {
-            console.error(e);
-        });
-
-        // You must add this handler to avoid uncaught exceptions.
-        obs.on('error', err => {
-            console.error('socket error:', err);
-        });
-
-        return obs;
-    }
-
-    static getSceneList(obs) {
-        let sceneList = [];
-
-        return obs.send('GetSceneList').then(function (sl) {
-            for (let id in sl.scenes) {
-                sceneList.push(sl.scenes[id].name);
-            }
-
-            return sceneList;
-        }).catch(function (e) {
-            console.error(e);
-        });
-    }
-
-    static startStreaming(obs) {
-        obs.sendCallback('StartStreaming', (error) => {
-            console.error(error);
-        });
+        // todo
     }
 
     /**
+     * Get all the subdirectories (as tags) and their source files from the video directory.
      *
-     *
-     * @param obs
-     * @param tag
-     * @returns {Promise<boolean>}
+     * @returns {Array} The source files with the tag
      */
-    static async changeScene(obs, tag) {
-        const sceneList = await StreamHelper.getSceneList(obs);
-
-        for (let s in sceneList) {
-            // Check if the tag meets the scene from the scenelist
-            if (sceneList[s] === tag) {
-                try {
-                    StreamHelper.setScene(obs, sceneList[s]);
-                    return true;
-                } catch (e) {
-                    throw e;
-                }
-            }
+    static getSceneList() {
+        if (!global.rootDirectory) {
+            throw new Error('Global variable rootDirectory is not set.');
         }
 
-        return false;
+        // Changed version from
+        // https://stackoverflow.com/questions/20822273/best-way-to-get-folder-and-file-list-in-javascript
+        // let dirs = [];
+
+
+        var _getAllFilesFromFolder = function (dir) {
+            var results = [];
+
+            fs.readdirSync(dir).forEach(function (file) {
+                let original = file;
+                file = dir + '/' + file;
+                var stat = fs.statSync(file);
+
+                if (stat && stat.isDirectory()) {
+                    // Recursive
+                    results = results.concat(_getAllFilesFromFolder(file))
+                } else {
+                    results.push({
+                        "tag": dir.match(/([^\/]*)\/*$/)[1], // The last directory from the filepath
+                        "file": original
+                    });
+                }
+
+            });
+
+            return results;
+        };
+
+        return _getAllFilesFromFolder(global.rootDirectory + "/video");
     }
 
 
-    static setScene(obs, name) {
-        obs.send('SetCurrentScene', {
-            'scene-name': name
-        }).catch(function (e) {
-            throw e;
+    static startStreaming() {
+        // TODO: after refresh this gives an error. Maybe the URL random per session?
+        // ALSO: after session, the ffmpeg session should be ended
+
+        // https://github.com/fluent-ffmpeg/node-fluent-ffmpeg
+        // Todo fix the source file, should be an .env option? (just like the output url)
+        ffmpeg('video/root.txt')
+            .addOptions([
+                '-crf 25',
+                '-preset ultrafast',
+                '-f flv'
+            ])
+            .output('rtmp://localhost/live/test')
+            .noAudio()
+            .videoCodec('libx264')
+            .size('?x720')
+            .inputFPS(25)
+            .on('end', callback)
+            .run();
+
+        function callback(s) {
+            console.log(s);
+        }
+    }
+
+    /**
+     * Changes the scene
+     */
+    static changeScene(tag) {
+        if (!global.rootDirectory) {
+            throw new Error('Global variable rootDirectory is not set.');
+        }
+
+        // Filter list on tag
+        const newList = this.getSceneList().filter(function (a) {
+            return a.tag === tag;
         });
-    }
 
+        if (!(newList.length > 0)) {
+            return false;
+        }
+
+        // return false if list is empty
+        console.log('length:' + newList.length);
+
+        let text = 'ffconcat version 1.0';
+        for (let l in newList) {
+            text += '\nfile ' + newList[l].tag + '/' + newList[l].file;
+        }
+
+        fs.writeFile(global.rootDirectory + '/video/nest.txt', text, (err => {
+            throw err;
+        }));
+
+        return true;
+    }
 }
 
 module.exports = StreamHelper;
