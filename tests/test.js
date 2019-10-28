@@ -6,10 +6,10 @@ describe('Questionnaire', function () {
 
     it('should parse json', function() {
         try {
-            q.parseFileToJson('data/data-error-q1-nodescription.json');
+            q.parseFileToJson('data/data.json');
             assert.ok('Works as expected.');
         } catch(e) {
-            assert.fail('Couldn\'t parse JSON file');
+            assert.fail('Couldn\'t parse JSON in the main data.json file.');
         }
     });
 
