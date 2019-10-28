@@ -5,7 +5,8 @@
   "description": "A proof of concept for streaming video to a browser",
   "scripts": {
     "start": "node ./bin/www",
-    "test": "mocha tests/*.js --timeout 10000 --reporter mocha-junit-reporter --reporter-options mochaFile=./tests/test-result.xml"
+    "test-devops": "mocha tests/*.js --timeout 10000 --reporter mocha-junit-reporter --reporter-options mochaFile=./tests/test-result.xml",
+    "test": "mocha tests/*.js"
   },
   "keywords": [
     "video",
