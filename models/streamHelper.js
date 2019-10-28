@@ -108,7 +108,8 @@ class StreamHelper {
         }
 
         fs.writeFile(global.rootDirectory + '/video/nest.txt', text, (err => {
-            throw err;
+            if (err)
+                throw err;
         }));
 
         return true;

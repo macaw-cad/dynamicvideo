@@ -1,22 +1,23 @@
+
+const StreamHelper = require("../models/streamHelper");
+
 /**
  *
- * @param stream
  * @param questionnaire
  * @returns {{question: *, success: *, answers: *, message: *}}
  */
-const StreamHelper = require("../models/streamHelper");
-
-
-function returnFirstQuestion(stream, questionnaire) {
+function returnFirstQuestion(questionnaire) {
     let success = true;
     let msg = '';
+
+    //check if questionnaire is ok
 
     const firstQuestion = questionnaire.questionList.all()[0];
     let fqAnswers = questionnaire.answerList.find(firstQuestion.answers);
 
     // Set the default scene
     try {
-        StreamHelper.changeScene('default')
+        success = StreamHelper.changeScene('default')
     } catch (e) {
         console.error(e);
         success = false;
@@ -41,11 +42,7 @@ function returnFirstQuestion(stream, questionnaire) {
  * @param res
  */
 exports.getQuestion = function (req, res) {
-    // Get the global stream and Scenelist instances
-    let stream = req.app.get('stream');
-    let questionnaire = req.app.get('questionnaire');
-
-    res.json(returnFirstQuestion(stream, questionnaire));
+    res.json(returnFirstQuestion(req.app.get('questionnaire')));
 };
 
 /**
@@ -54,19 +51,14 @@ exports.getQuestion = function (req, res) {
  * @param res
  */
 exports.sendAnswer = function (req, res) {
-
-    // Get the global stream and Scenelist instances
-    let stream = req.app.get('stream');
-
     /** @type {Questionnaire} */
     let questionnaire = req.app.get('questionnaire');
     let rawAnswerId = req.body.answer;
-
     let success = true;
     let msg = '';
 
     if (typeof rawAnswerId === 'undefined') {
-        res.json(returnFirstQuestion(stream, questionnaire));
+        res.json(returnFirstQuestion(questionnaire));
         return;
     }
 
@@ -118,7 +110,7 @@ exports.sendAnswer = function (req, res) {
 
     if (!found) {
         msg = 'No suitable scene found for tag ' + tag;
-        console.log("\x1b[31m%s\x1b[0m", msg);
+        console.log("\x1b[31m%s\x1b[0m", msg); //in red
     }
 
     // return with new question, based on the answer from the client
