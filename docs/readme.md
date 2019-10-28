@@ -6,22 +6,21 @@
 
 
 ## Prerequisites
-You must have the following software installed and running
-- OBS Studio
-- OBS Studio Websocket
+You must have the following software installed:
+- FFmpeg (version >=0.9)
+
+On Windows:
+- The `PATH` variable to your FFmpeg installation should be set.
 
 ## Installation
-Rename `.env.example` to `.env` and change it according to your needs.
-Run OBS Studio and make sure the OBS Studio Websocket settings are the same as the `OBS_*` environment variables.
-
-To change the OBS Studio Websocket settings, go to OBS Studio > Tools > Websocket Server Settings.
+Rename (or copy) `.env.example` to `.env` and change it according to your needs.
 
 ```bash
 npm install
 npm start
 ```
 
-When developing, you can use `nodemon start` instead of `npm start` so the application will automatically 
+When developing, you can use `nodemon start` instead of `npm start` so the application will automatically
 restart when there is a change detected while developing.
 
 ## Environment
@@ -29,6 +28,21 @@ There are different environment variables you can set. The variables are located
 
 ## Data
 The data is provided in the `data` folder. The main data file is `data.json`, while the other files are there for test purposes.
+There are some requirements attached to the data. This will also be tested with the tests within the project.
+The data.json file should be structured like this:
+- questions `array:question`
+- answers `array:answer`
+
+The questions array should contain only questions. Every question is an object and structured as follows:
+- id `int`
+- desc `string`
+- answers `array:int` (refers to answer->id)
+- based_on `array:string` (refers to answer->tags)
+
+The answers array should contain only answers. Every answer is an object and structured as follows:
+- id `int`
+- desc `string`
+- tags `array:string`
 
 ## Videos
 The videos are stored in the `video` folder with the following file structure:
