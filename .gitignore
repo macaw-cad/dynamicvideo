@@ -69,3 +69,6 @@ public/stylesheets/style.css.map
 
 # Test results
 tests/*.xml
+
+# playlists
+video/*.txt
