@@ -1,9 +1,20 @@
 /**
+ * The Index controller
  *
- * @type {Question}
+ * This controller handles the index page
  */
-var Question = require('../models/question');
 
-exports.index = function (req, res) {
-    res.render('index', {title: 'Livestream'})
-};
+
+const Logger = require('../helpers/logger');
+
+
+class IndexController {
+    index(req, res) {
+        Logger.log('Session ID: ' + req.session.id);
+        res.render('index', {title: 'Livestream'});
+    };
+
+    //set session
+}
+
+module.exports = IndexController;

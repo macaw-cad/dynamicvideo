@@ -7,13 +7,13 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var sassMiddleware = require('node-sass-middleware');
+var session = require('express-session')
 
 var Questionnaire = require('./models/questionnaire');
 
 // Declare NMS
 const NodeMediaServer = require('node-media-server');
 var indexRouter = require('./routes/index');
-const StreamHelper = require("./models/streamHelper");
 
 var app = express();
 
@@ -32,9 +32,26 @@ app.use(sassMiddleware({
     sourceMap: true
 }));
 
+// Session handler
+let sess = {
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {}
+};
+
+if (app.get('env') === 'production') {
+    app.set('trust proxy', 1); // trust first proxy
+    sess.cookie.secure = true; // serve secure cookies
+}
+
+app.use(session(sess));
+
+// Make the module sources available for frontend purposes
 app.use(express.static(path.join(__dirname, '/node_modules/flv.js/dist/')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Bind homepage to the indexrouter
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
@@ -58,10 +75,11 @@ let q = new Questionnaire();
 q.parseFileToJson('data/data.json');
 
 // Parse the JSON to objects
-q.parseJsonToQuestions();
-q.parseJsonToAnswers();
-q.parseJsonToTags();
+q.parseJsonToQuestionList();
+q.parseJsonToAnswerList();
+q.parseJsonToTagList();
 
+// make questionnaire global
 app.set('questionnaire', q);
 
 // Start mediaserver
@@ -85,7 +103,5 @@ global.rootDirectory = __dirname;
 
 var nms = new NodeMediaServer(nmsConfig);
 nms.run();
-
-// app.set('stream', StreamHelper.initStream(app));
 
 module.exports = app;
