@@ -23,10 +23,8 @@ function init() {
     // When there is an ajax call, the xhrChangeListener will be fired
     xhttp.onreadystatechange = xhrChangeListener;
     xhttp.send();
-
-    // Init the video
-    initVideo();
 }
+
 
 /**
  *
@@ -43,10 +41,15 @@ function buttonListener() {
 function xhrChangeListener() {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
         const json = JSON.parse(this.response);
+        const startedStream = json.started_stream;
         const question = json.question;
         const answers = json.answers;
         const success = json.success;
         const message = json.message;
+
+        if (startedStream) {
+            initVideo();
+        }
 
         // todo check if json is valid
 
@@ -114,11 +117,12 @@ function initVideo() {
 
     // TODO make this robust
     // TODO fix URL
-
     if (flvjs.isSupported()) {
+        console.log('FLV is supported');
         const videoElement = document.getElementById('video_element');
         const flvPlayer = flvjs.createPlayer({
             type: 'flv',
+            isLive: true,
             url: 'http://localhost:8000/live/test.flv'
         });
         flvPlayer.attachMediaElement(videoElement);
