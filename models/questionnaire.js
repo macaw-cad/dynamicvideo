@@ -7,6 +7,8 @@ const Answer = require('./answer');
 const AnswerList = require('./answerList');
 const Tag = require('./tag');
 const TagList = require('./tagList');
+const Logger = require('../helpers/logger');
+
 
 class Questionnaire {
 
@@ -43,7 +45,7 @@ class Questionnaire {
     /**
      * Parse json to questions
      */
-    parseJsonToQuestions() {
+    parseJsonToQuestionList() {
         const questions = this.json.questions;
 
         if ('undefined' !== typeof questions) {
@@ -51,7 +53,7 @@ class Questionnaire {
                 this.questionList.addQuestion(new Question(questions[q]));
             }
         } else {
-            console.error('No questions found in JSON file! TODO GOOD LOGGING');
+            Logger.error('No questions found in JSON file! TODO GOOD LOGGING');
         }
     }
 
@@ -59,7 +61,7 @@ class Questionnaire {
      * Parse json to answers
      * @param answers in JSON format
      */
-    parseJsonToAnswers() {
+    parseJsonToAnswerList() {
         const answers = this.json.answers;
 
         if ('undefined' !== typeof answers) {
@@ -67,7 +69,7 @@ class Questionnaire {
                 this.answerList.addAnswer(new Answer(answers[a]));
             }
         } else {
-            console.error('No answers found in JSON file! TODO GOOD LOGGING');
+            Logger.error('No answers found in JSON file! TODO GOOD LOGGING');
         }
     }
 
@@ -75,7 +77,7 @@ class Questionnaire {
      * Parse json to tags
      * Get all the tags from the available answers
      */
-    parseJsonToTags() {
+    parseJsonToTagList() {
         const answers = this.json.answers;
 
 
@@ -85,7 +87,7 @@ class Questionnaire {
             for (let a in answers) {
                 for (let t in answers[a].tags) {
                     if ('undefined' === typeof answers[a].tags[t]) {
-                        console.error('No tags found in answer "' + answers[a].desc + '"')
+                        Logger.error('No tags found in answer "' + answers[a].desc + '"')
                     }
 
 
@@ -95,7 +97,7 @@ class Questionnaire {
                 }
             }
         } else {
-            console.error('No answers found in JSON file! TODO GOOD LOGGING');
+            Logger.error('No answers found in JSON file! TODO GOOD LOGGING');
         }
     }
 
@@ -120,10 +122,10 @@ class Questionnaire {
                 }
             } catch (e) {
                 // TODO: Maybe throw error forward to user in json?
-                console.error(e);
+                Logger.error(e);
             }
         } else {
-            console.log('No answer given');
+            Logger.log('No answer given');
 
 
             return;

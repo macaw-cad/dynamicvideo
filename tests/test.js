@@ -4,30 +4,30 @@ var Questionnaire = require('../models/questionnaire');
 describe('Questionnaire', function () {
     let q = new Questionnaire();
 
-    it('should parse json', function() {
+    it('should parse json', function () {
         try {
             q.parseFileToJson('data/data.json');
             assert.ok('Works as expected.');
-        } catch(e) {
+        } catch (e) {
             assert.fail('Couldn\'t parse JSON in the main data.json file.');
         }
     });
 
-    it('should not parse json when source file is corrupt', function() {
+    it('should not parse json when source file is corrupt', function () {
         try {
             q.parseFileToJson('data/data-error-parse.json');
             assert.fail('Shouldn\'t pass this function');
-        } catch(e) {
+        } catch (e) {
             assert.deepStrictEqual(e, Error('Couldn\'t parse the JSON'));
         }
     });
 
-    it('should throw error when file does not exist', function() {
+    it('should throw error when file does not exist', function () {
         let filepath = 'path-doesnt-exist';
         try {
             q.parseFileToJson(filepath);
             assert.fail('Shouldn\'t pass this function');
-        } catch(e) {
+        } catch (e) {
             assert.deepStrictEqual(e, Error('Couldn\'t read the file ' + filepath));
         }
     });
@@ -35,7 +35,7 @@ describe('Questionnaire', function () {
 
     it('should get an error on a question without description', function () {
         try {
-            q.parseJsonToQuestions();
+            q.parseJsonToQuestionList();
         } catch (e) {
             assert.deepStrictEqual(e, Error('_description is not set on question 1'));
         }

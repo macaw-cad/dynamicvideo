@@ -1,5 +1,6 @@
 "use strict";
 
+const Logger = require('../helpers/logger');
 
 class TagList {
 
@@ -64,7 +65,7 @@ class TagList {
         for (let t in this.tags) {
             if (this.tags[t].title === tag.title) {
                 // Notify in console
-                console.log('Tag "' + tag.title + '" is a duplicate, it will not be added again.');
+                Logger.log('Tag "' + tag.title + '" is a duplicate, it will not be added again.');
                 return;
             }
         }
