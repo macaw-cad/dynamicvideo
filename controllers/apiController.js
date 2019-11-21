@@ -106,7 +106,6 @@ class ApiController {
 
         // Process the given answer in the questionnaire
         questionnaire.processAnswer(answer);
-        const tag = answer.tags[0];
 
         let nextQuestion = questionnaire.getNextQuestion();
         let nqAnswers = null;
@@ -129,8 +128,12 @@ class ApiController {
         // TODO: We want to change scenes every X seconds, based on the most popular tags available (not only the best one)
         // let bestTag = questionnaire.tagList.getBestTag();
 
+        const tag = questionnaire.tagList.getBestTag();
 
         try {
+            // let t = questionnaire.tagList.find(tag.title);
+            tag.playCount++;
+
             newVideo = sh.changeScene(tag, sessionId);
         } catch (e) {
             Logger.error(e);

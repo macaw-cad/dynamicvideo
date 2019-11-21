@@ -41,6 +41,19 @@ class Tag {
         this._count = d;
     }
 
+    get playCount() {
+
+        if (!this._playCount) {
+            return 0;
+        }
+
+        return this._playCount;
+    }
+
+    set playCount(d) {
+        this._playCount = d;
+    }
+
     _parse(json) {
         this._id = json.id;
         this._title = json.title;

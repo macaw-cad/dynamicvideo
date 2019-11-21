@@ -65,6 +65,26 @@ class TagList {
         this.tags.push(tag);
     }
 
+    /**
+     *
+     * @returns {*}
+     */
+    getBestTag() {
+
+        // Send the best available tag
+        // The play count should be as low as possible
+        // But count should be as high as possible.
+
+        // Maybe brain.js?
+
+        console.table(this.all(true));
+
+
+        return this.all(true)[0];
+
+
+    }
+
 }
 
 module.exports = TagList;

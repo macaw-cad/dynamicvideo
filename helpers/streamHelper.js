@@ -77,7 +77,7 @@ class StreamHelper {
         if (!global.rootDirectory) {
             throw new Error('Global variable rootDirectory is not set.');
         }
-
+        
         // Filter list on tag
         const newList = this._getSceneList().filter(function (a) {
             return a.tag === tag;
@@ -85,7 +85,7 @@ class StreamHelper {
 
         // return false if list is empty
         if (!(newList.length > 0)) {
-            Logger.warn('There are no available videos to play.')
+            Logger.warn('There are no available videos to play for tag "' + tag + '".')
             return false;
         }
 
