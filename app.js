@@ -9,7 +9,6 @@ var logger = require('morgan');
 var sassMiddleware = require('node-sass-middleware');
 var session = require('express-session')
 
-var Questionnaire = require('./models/questionnaire');
 
 // Declare NMS
 const NodeMediaServer = require('node-media-server');
@@ -70,17 +69,6 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 
-// Create a global questionnaire
-let q = new Questionnaire();
-q.parseFileToJson('data/data.json');
-
-// Parse the JSON to objects
-q.parseJsonToQuestionList();
-q.parseJsonToAnswerList();
-q.parseJsonToTagList();
-
-// make questionnaire global
-app.set('questionnaire', q);
 
 // Start mediaserver
 const nmsConfig = {
@@ -103,5 +91,13 @@ global.rootDirectory = __dirname;
 
 var nms = new NodeMediaServer(nmsConfig);
 nms.run();
+
+nms.on('doneConnect', (id, args) => {
+    console.log(args);
+    //Sess id available in args
+
+    // Clean all mess from session
+    // Clean up ffmpeg process
+});
 
 module.exports = app;

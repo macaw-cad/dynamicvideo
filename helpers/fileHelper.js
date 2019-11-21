@@ -46,7 +46,7 @@ class FileHelper {
                         "file": original
                     });
                 } else {
-                    console.warn(chalk.yellow(original + ' is not a supported video file'));
+                    // console.warn(chalk.yellow(original + ' is not a supported video file'));
                 }
             }
 

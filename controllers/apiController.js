@@ -11,6 +11,8 @@ class ApiController {
     /**
      *
      * @param questionnaire
+     * @param sessionId
+     *
      * @returns {{question: *, success: *, answers: *, message: *}}
      */
     _returnFirstQuestion(questionnaire, sessionId) {
@@ -19,7 +21,10 @@ class ApiController {
         let msg = '';
 
         //Get question and answers
-        const firstQuestion = questionnaire.questionList.all()[0];
+        const firstQuestion = questionnaire.getNextQuestion();
+
+        firstQuestion.asked = true;
+
         const fqAnswers = questionnaire.answerList.find(firstQuestion.answers);
 
         const sh = new StreamHelper();
@@ -48,7 +53,8 @@ class ApiController {
             message: msg,
             question: firstQuestion,
             answers: fqAnswers,
-            started_stream: startedStream
+            started_stream: startedStream,
+            video_id: sessionId
         };
     }
 
@@ -59,9 +65,11 @@ class ApiController {
      * @param res
      */
     getQuestion(req, res) {
-        Logger.log(this);
+        const sessionId = req.session.id;
+        let questionnaire = req.app.get('questionnaire_' + sessionId);
 
-        res.json(this._returnFirstQuestion(req.app.get('questionnaire'), req.session.id));
+
+        res.json(this._returnFirstQuestion(questionnaire, sessionId));
     };
 
     /**
@@ -73,7 +81,8 @@ class ApiController {
 
     sendAnswer(req, res) {
         /** @type {Questionnaire} */
-        let questionnaire = req.app.get('questionnaire');
+        const sessionId = req.session.id;
+        let questionnaire = req.app.get('questionnaire_' + sessionId);
         let rawAnswerId = req.body.answer;
         let success = true;
         let newVideo = false;
@@ -81,7 +90,9 @@ class ApiController {
         const sh = new StreamHelper();
 
         if (typeof rawAnswerId === 'undefined') {
-            res.json(this._returnFirstQuestion(questionnaire, req.session.id));
+            // TODO: Answer id is undefined, maybe something went wrong?
+
+            res.json(this._returnFirstQuestion(questionnaire, sessionId));
             return;
         }
 
@@ -92,27 +103,24 @@ class ApiController {
         // Get the next question based on the given answer
         // questionnaire.processAnswer(answerId);
         const answer = questionnaire.answerList.find(answerId);
+
+        // Process the given answer in the questionnaire
+        questionnaire.processAnswer(answer);
         const tag = answer.tags[0];
 
-        let nextQuestion = questionnaire.questionList.findByBasedOn(tag);
+        let nextQuestion = questionnaire.getNextQuestion();
         let nqAnswers = null;
 
-        if (Array.isArray(nextQuestion) && nextQuestion.length === 1) {
-            nextQuestion = nextQuestion[0];
+        if (!(nextQuestion === null || typeof nextQuestion === 'undefined')) {
             nqAnswers = questionnaire.answerList.find(nextQuestion.answers);
-        } else if (nextQuestion.length === 0) {
+            nextQuestion.asked = true;
+        } else {
 
             // TODO Find a nice fix for this
-            msg = 'No question found';
+            msg = 'We think we have a pretty accurate view of your interests. Enjoy!';
             Logger.warn(msg);
             nextQuestion = null;
             success = false;
-        } else {
-            // TODO: Find nice fix for this
-            nextQuestion = nextQuestion[0];
-
-            msg = 'Multiple questions found. Currently picking only the first one.';
-            Logger.warn(msg);
         }
 
 
@@ -123,7 +131,7 @@ class ApiController {
 
 
         try {
-            newVideo = sh.changeScene(tag, req.session.id);
+            newVideo = sh.changeScene(tag, sessionId);
         } catch (e) {
             Logger.error(e);
             newVideo = false;

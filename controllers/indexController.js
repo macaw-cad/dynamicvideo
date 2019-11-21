@@ -5,14 +5,33 @@
  */
 
 
+const Questionnaire = require('../models/questionnaire');
 const Logger = require('../helpers/logger');
 
 
 class IndexController {
     index(req, res) {
-        Logger.log('Session ID: ' + req.session.id);
+        Logger.info('Session ID: ' + req.session.id);
+
+        let q = this._setQuestionnaire();
+        req.app.set('questionnaire_' + req.session.id, q);
+
         res.render('index', {title: 'Livestream'});
     };
+
+
+    _setQuestionnaire() {
+        // Create a global questionnaire
+        let q = new Questionnaire();
+        q.parseFileToJson('data/data.json');
+
+        // Parse the JSON to objects
+        q.parseJsonToQuestionList();
+        q.parseJsonToAnswerList();
+        q.parseJsonToTagList();
+
+        return q;
+    }
 
     //set session
 }

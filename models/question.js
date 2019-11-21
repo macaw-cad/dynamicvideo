@@ -109,6 +109,14 @@ class Question {
         this._basedOn = b;
     }
 
+    get asked() {
+        return this._asked;
+    }
+
+    set asked(a) {
+        this._asked = a;
+    }
+
 }
 
 module.exports = Question;

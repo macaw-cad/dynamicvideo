@@ -20,14 +20,14 @@ class QuestionList {
         this.questions.push(question);
     }
 
+
     /**
      *
-     * @param basedOn
-     * @returns {null|*}
+     * @returns {*|null}
      */
-    findByBasedOn(basedOn) {
+    getAvailableQuestions() {
         return this.questions.filter(q => {
-            return (typeof q.basedOn !== 'undefined') ? q.basedOn.includes(basedOn) : false;
+            return q.asked !== true;
         }) || null;
     }
 
@@ -45,18 +45,6 @@ class QuestionList {
 
     set questions(a) {
         this._questions = a;
-    }
-
-    get givenQuestions() {
-        if (typeof this._givenQuestions === "undefined") {
-            this._givenQuestions = [];
-        }
-
-        return this._givenQuestions;
-    }
-
-    set givenQuestions(ga) {
-        this._givenQuestions = ga;
     }
 }
 

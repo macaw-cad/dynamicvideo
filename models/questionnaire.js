@@ -102,13 +102,45 @@ class Questionnaire {
     }
 
     /**
+     *
+     * @returns {null|*}
+     */
+    getNextQuestion() {
+        let questions = this.questionList.getAvailableQuestions();
+
+        if (questions === null) {
+            throw new Error('All questions answered');
+        }
+
+        // If there are no answers given
+        if (this.answerList.givenAnswers.length === 0) {
+            // Choose a random question to start with
+            return questions[Math.floor(Math.random() * questions.length)];
+        }
+
+        //test
+
+        return questions[Math.floor(Math.random() * questions.length)];
+
+        // TODO: Make this better.
+        // Not only searching for a basedon. Search for multiple tags oid.
+        // Then we don't even need the tag parameter, but we can gather information from the taglist, which is updated by the processanswer method.
+        // let q = questions.filter(q => {
+        //     return (typeof q.basedOn !== 'undefined') ? q.basedOn.includes(tag) : false;
+        // }) || null;
+
+        // q.asked = true;
+
+        // return q;
+    }
+
+    /**
      * Get a question related to the given answers
      * TODO: Fix the function name
      *
-     * @param answerId The ID of the given answer
+     * @param answer The given answer
      */
-    processAnswer(answerId) {
-        let answer = this.answerList.find(answerId);
+    processAnswer(answer) {
 
         if (!(answer === null || typeof answer === 'undefined')) {
             try {
@@ -137,6 +169,7 @@ class Questionnaire {
 
     }
 
+
     /**
      * Getters & setters
      */
@@ -160,7 +193,7 @@ class Questionnaire {
 
     /**
      *
-     * @returns QuestionList
+     * @returns TagList
      */
     get tagList() {
         return this._tagList;

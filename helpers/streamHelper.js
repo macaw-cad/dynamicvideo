@@ -49,18 +49,18 @@ class StreamHelper {
                 // '-c copy', // doesn't work with streaming
                 '-f flv'
             ])
-            .output('rtmp://localhost/live/test')
+            .output('rtmp://localhost/live/' + sessionId)
             .noAudio()
             .videoCodec('libx264') //otherwise it stops after first vid
             // .inputFPS(25)
             .on('error', function (s) {
-                Logger.log('Error on ffmpeg process');
+                Logger.error('Error on ffmpeg process');
                 console.trace(s);
             })
             .on('end', function () {
-                Logger.log('Merging finished !');
+                Logger.info('Merging finished !');
             }).on('start', function (commandLine) {
-            Logger.log('Spawned Ffmpeg with command: ' + commandLine)
+            Logger.info('Spawned Ffmpeg with command: ' + commandLine)
         })
             .run();
     }
