@@ -2,7 +2,7 @@
   "questions": [
     {
       "id": 0,
-      "desc": "Morning! I don't know what to do today. Shall I go to work or take a day off?",
+      "desc": "What type of stay do you prefer?",
       "answers": [
         0,
         1
@@ -10,120 +10,183 @@
     },
     {
       "id": 1,
-      "desc": "What do you like more, relaxing or doing activities?",
+      "desc": "Which activity do you like the most?",
       "answers": [
         2,
-        3
-      ],
-      "based_on": [
-        "day-off"
-      ]
-    },
-    {
-      "id": 2,
-      "desc": "How should I go to work today?",
-      "answers": [
+        3,
         4,
         5
       ],
       "based_on": [
-        "work"
       ]
     },
     {
-      "id": 4,
-      "desc": "So now I'm at work, what are we going to do first?",
+      "id": 2,
+      "desc": "Where do you like to see yourself?",
       "answers": [
         6,
         7
       ],
       "based_on": [
-        "walking",
-        "public-transport"
       ]
     },
     {
-      "id": 4,
-      "desc": "Do you like it a little more extreme?",
+      "id": 3,
+      "desc": "Do you like nature more or the city?",
       "answers": [
         8,
         9
       ],
       "based_on": [
-        "activities",
-        "relax"
+      ]
+    },
+    {
+      "id": 4,
+      "desc": "What type of weather do you prefer?",
+      "answers": [
+        10,
+        11
+      ],
+      "based_on": [
+      ]
+    },
+    {
+      "id": 5,
+      "desc": "Which type of transport do you want to use?",
+      "answers": [
+        12,
+        13,
+        14
+      ],
+      "based_on": [
       ]
     }
   ],
   "answers": [
     {
       "id": 0,
-      "desc": "Work",
+      "desc": "All inclusive",
       "tags": [
-        "work"
+        "all-inclusive",
+        "relax"
       ]
     },
     {
       "id": 1,
-      "desc": "Take a day off",
+      "desc": "Different apartments, guesthouses or hostels",
       "tags": [
-        "day-off"
+        "adventure",
+        "trip"
       ]
     },
     {
       "id": 2,
-      "desc": "Doing activities",
+      "desc": "Swimming",
       "tags": [
-        "activities"
+        "relax",
+        "swimming"
       ]
     },
     {
       "id": 3,
-      "desc": "Relax",
+      "desc": "Hiking",
       "tags": [
-        "relax"
+        "adventure",
+        "sport",
+        "hiking",
+        "nature"
       ]
     },
     {
       "id": 4,
-      "desc": "With public transport",
+      "desc": "Visiting a museum",
       "tags": [
-        "public-transport"
+        "culture",
+        "museum",
+        "city"
       ]
     },
     {
       "id": 5,
-      "desc": "Be healthy, let's walk.",
+      "desc": "Partying",
       "tags": [
-        "walking"
+        "party",
+        "alcohol",
+        "city"
       ]
     },
     {
       "id": 6,
-      "desc": "Work hard, play hard. Kick-off with some FIFA.",
+      "desc": "On a road trip",
       "tags": [
-        "fifa"
+        "adventure",
+        "road-trip",
+        "car"
       ]
     },
     {
       "id": 7,
-      "desc": "Start working",
+      "desc": "At a cruise",
       "tags": [
-        "work-start"
-      ]
-    },
-    {
-      "id": 8,
-      "desc": "Nah",
-      "tags": [
+        "cruise",
+        "boat",
         "relax"
       ]
     },
     {
-      "id": 9,
-      "desc": "Yeah let's go!",
+      "id": 8,
+      "desc": "Nature",
       "tags": [
-        "skydive"
+        "nature",
+        "adventure"
+      ]
+    },
+    {
+      "id": 9,
+      "desc": "City trip",
+      "tags": [
+        "city-trip",
+        "city"
+      ]
+    },
+    {
+      "id": 10,
+      "desc": "Cold",
+      "tags": [
+        "cold",
+        "winter",
+        "christmas"
+      ]
+    },
+    {
+      "id": 11,
+      "desc": "Warm",
+      "tags": [
+        "beach",
+        "warm"
+      ]
+    },
+    {
+      "id": 12,
+      "desc": "Airplane",
+      "tags": [
+        "airplane"
+      ]
+    },
+    {
+      "id": 13,
+      "desc": "Car",
+      "tags": [
+        "road-trip",
+        "car"
+      ]
+    },
+    {
+      "id": 14,
+      "desc": "Boat",
+      "tags": [
+        "boat",
+        "cruise"
       ]
     }
   ]
