@@ -15,15 +15,20 @@ class Logger {
     }
 
     static info(message) {
-        console.info(chalk.blue(message));
+        console.info(chalk.bgBlue.whiteBright('INFO:') + ' ' + chalk.blue(message));
     }
 
     static warn(message) {
-        console.warn(chalk.bgYellow('WARNING:') + ' ' + chalk.yellow(message));
+        console.warn(chalk.bgYellow.whiteBright('WARNING:') + ' ' + chalk.yellow(message));
     }
 
     static error(message) {
-        console.warn(chalk.bgRed('ERROR: ') + ' ' + chalk.red(message));
+        console.error(chalk.bgRed.whiteBright('ERROR:') + ' ' + chalk.red(message));
+    }
+
+
+    static table(message) {
+        console.table(message);
     }
 
 }
