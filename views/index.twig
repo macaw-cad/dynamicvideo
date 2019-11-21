@@ -3,11 +3,13 @@
 {% block body %}
     <div class="container">
         <h1 class="container__title">PoC - Control your own live stream</h1>
-        <span id="question_container" class="container__question"></span>
-        <div id="answers_container" class="container__answers"></div>
 
         {# The muted tag is necessary for autoplay the video #}
         {# https://stackoverflow.com/questions/49930680/how-to-handle-uncaught-in-promise-domexception-play-failed-because-the-use #}
         <video id="video_element" muted="muted"></video>
+
+
+        <span id="question_container" class="container__question"></span>
+        <div id="answers_container" class="container__answers"></div>
     </div>
 {% endblock %}
