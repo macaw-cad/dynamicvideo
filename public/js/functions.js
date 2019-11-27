@@ -46,7 +46,7 @@ function xhrChangeListener() {
         const success = json.success;
         const message = json.message;
 
-        if (startedStream && videoId) {
+        if (videoId) {
             initVideo(videoId);
         }
 

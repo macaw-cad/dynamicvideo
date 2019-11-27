@@ -1,7 +1,7 @@
 "use strict";
 
 const fs = require("fs");
-const chalk = require('chalk');
+const Logger = require('./logger');
 
 class FileHelper {
 
@@ -41,15 +41,17 @@ class FileHelper {
 
                 // TODO make this an array with supported formats
                 if (supportedVideoFormats.includes(original.slice(original.length - 4))) {
+                    const tag = dir.match(/([^\/]*)\/*$/)[1];
                     results.push({
-                        "tag": dir.match(/([^\/]*)\/*$/)[1], // The last directory from the filepath
-                        "file": original
+                        "tag": tag, // The last directory from the filepath
+                        "file": original,
                     });
-                } else {
-                    // console.warn(chalk.yellow(original + ' is not a supported video file'));
+
+                } else if (original.slice(original.length - 4) !== '.txt') {
+                    // text files ignored
+                    Logger.log(original + ' is not a supported video file');
                 }
             }
-
         });
 
         return results;
@@ -76,7 +78,6 @@ class FileHelper {
                 throw err;
         }));
     }
-
 
 }
 

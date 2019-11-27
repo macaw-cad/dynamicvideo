@@ -5,44 +5,28 @@ const Logger = require('../helpers/logger');
 class TagList {
 
     /**
+     * The constructor
      *
-     * @param tags The list of all the tags available
+     * @param tags A list of all the available tags
      */
     constructor(tags) {
         this._tags = [];
         this._tags = tags;
     }
 
-    get tags() {
-        if (typeof this._tags === "undefined") {
-            this._tags = [];
-        }
-
-        return this._tags;
-    }
-
-    set tags(a) {
-        this._tags = a;
-    }
-
     /**
      * Get all the tags
      *
-     * @param sorted if they need to be sorted
      * @returns array All available tags
      */
-    all(sorted) {
-        if (sorted !== true) {
-            return this.tags;
-        } else {
-            return this.tags.sort((a, b) => (a.count > b.count) ? -1 : ((b.count > a.count) ? 1 : 0));
-        }
+    all() {
+        return this.tags;
     }
 
     /**
-     * Return tag corresponding with given title
+     * Get a tag corresponding with given title
      *
-     * @param title
+     * @param title The title of the tag
      */
     find(title) {
         for (let tag in this.tags) {
@@ -52,6 +36,11 @@ class TagList {
         }
     }
 
+    /**
+     * Add a tag to the TagList.
+     *
+     * @param tag The tag which needs to be added to the list.
+     */
     addTag(tag) {
         // Don't add the tag if the tag is already in the list.
         for (let t in this.tags) {
@@ -66,23 +55,51 @@ class TagList {
     }
 
     /**
+     * Get the best available tag
+     * The play count should be as low as possible, and the count must be as high as possible.
      *
-     * @returns {*}
+     * @returns {Tag} The best available tag
      */
     getBestTag() {
+        // Sort the list of tags
+        let sorted = this.tags.sort(
+            function (tagA, tagB) {
+                // if they are both 0, put the one with the lowest play count on top
+                if (tagA.count === 0 && tagB.count === 0) {
+                    return tagA.playCount - tagB.playCount;
+                }
 
-        // Send the best available tag
-        // The play count should be as low as possible
-        // But count should be as high as possible.
+                // If the tag count is zero, make sure the tag is at the bottom of the list
+                if (tagA.count === 0) {
+                    return 1;
+                }
+                if (tagB.count === 0) {
+                    return -1
+                }
 
-        // Maybe brain.js?
+                // Sort at first by playCount ascending (so most played is lower)
+                // Then on count descending. (so amount of answers on top)
+                return tagA.playCount - tagB.playCount || tagB.count - tagA.count;
+            }
+        );
 
-        console.table(this.all(true));
+        return sorted[0];
+    }
 
+    /**
+     * Getters & setters
+     */
 
-        return this.all(true)[0];
+    get tags() {
+        if (typeof this._tags === "undefined") {
+            this._tags = [];
+        }
 
+        return this._tags;
+    }
 
+    set tags(a) {
+        this._tags = a;
     }
 
 }

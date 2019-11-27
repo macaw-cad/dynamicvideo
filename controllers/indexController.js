@@ -33,7 +33,7 @@ class IndexController {
         return q;
     }
 
-    //set session
+
 }
 
 module.exports = IndexController;

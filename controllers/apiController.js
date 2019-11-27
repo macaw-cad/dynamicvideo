@@ -41,7 +41,7 @@ class ApiController {
         if (success) {
             try {
                 // Now start the stream
-                sh.startStreaming(sessionId);
+                sh.startStreaming(sessionId, questionnaire);
                 startedStream = true;
             } catch (e) {
 
@@ -67,7 +67,6 @@ class ApiController {
     getQuestion(req, res) {
         const sessionId = req.session.id;
         let questionnaire = req.app.get('questionnaire_' + sessionId);
-
 
         res.json(this._returnFirstQuestion(questionnaire, sessionId));
     };
@@ -99,9 +98,6 @@ class ApiController {
         // TODO: check if stream/scenelist is set (correct)
         // TODO: check if answer is given, otherwise give user (browser) feedback
         const answerId = parseInt(rawAnswerId);
-
-        // Get the next question based on the given answer
-        // questionnaire.processAnswer(answerId);
         const answer = questionnaire.answerList.find(answerId);
 
         // Process the given answer in the questionnaire
@@ -110,36 +106,19 @@ class ApiController {
         let nextQuestion = questionnaire.getNextQuestion();
         let nqAnswers = null;
 
+        // Get the answers
         if (!(nextQuestion === null || typeof nextQuestion === 'undefined')) {
             nqAnswers = questionnaire.answerList.find(nextQuestion.answers);
             nextQuestion.asked = true;
         } else {
 
-            // TODO Find a nice fix for this
+            // TODO Find a nice solution for this
             msg = 'We think we have a pretty accurate view of your interests. Enjoy!';
             Logger.warn(msg);
             nextQuestion = null;
             success = false;
         }
 
-
-        // Get the best tag
-        // TODO: optimize this part so we can change scenes more often
-        // TODO: We want to change scenes every X seconds, based on the most popular tags available (not only the best one)
-        // let bestTag = questionnaire.tagList.getBestTag();
-
-        const tag = questionnaire.tagList.getBestTag();
-
-        try {
-            // let t = questionnaire.tagList.find(tag.title);
-            tag.playCount++;
-
-            newVideo = sh.changeScene(tag, sessionId);
-        } catch (e) {
-            Logger.error(e);
-            newVideo = false;
-            msg = e.description;
-        }
 
         // return with new question, based on the answer from the client
         res.json(

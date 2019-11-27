@@ -120,7 +120,7 @@
       "desc": "On a road trip",
       "tags": [
         "adventure",
-        "road-trip",
+        "trip",
         "car"
       ]
     },
@@ -177,7 +177,7 @@
       "id": 13,
       "desc": "Car",
       "tags": [
-        "road-trip",
+        "trip",
         "car"
       ]
     },

@@ -12,6 +12,7 @@ class StreamHelper {
      */
     constructor() {
         this.fileHelper = new FileHelper();
+        this._sceneList = this._getSceneList();
     }
 
     /**
@@ -30,12 +31,13 @@ class StreamHelper {
     /**
      *
      */
-    startStreaming(sessionId) {
+    startStreaming(sessionId, questionnaire) {
         if (!global.rootDirectory) {
             throw new Error('Global variable rootDirectory is not set.');
         }
 
         this.fileHelper.buildRootPlaylist(sessionId);
+        const t = this;
 
         // TODO: after refresh this gives an error. Maybe the URL random per session?
         // ALSO: after session, the ffmpeg session should be ended
@@ -46,24 +48,54 @@ class StreamHelper {
                 '-re'
             )
             .addOptions([
-                // '-c copy', // doesn't work with streaming
                 '-f flv'
             ])
             .output('rtmp://localhost/live/' + sessionId)
             .noAudio()
             .videoCodec('libx264') //otherwise it stops after first vid
-            // .inputFPS(25)
             .on('error', function (s) {
                 Logger.error('Error on ffmpeg process');
                 console.trace(s);
             })
             .on('end', function () {
                 Logger.info('Merging finished !');
-            }).on('start', function (commandLine) {
-            Logger.info('Spawned Ffmpeg with command: ' + commandLine)
+            }).on('start', function (command) {
+            t.setSceneChanger(command, sessionId, questionnaire)
         })
             .run();
+
+
     }
+
+    /**
+     *
+     * @param commandLine
+     * @param sessionId
+     * @param questionnaire
+     */
+    setSceneChanger(commandLine, sessionId, questionnaire) {
+        Logger.info('Spawned Ffmpeg with command: ' + commandLine)
+        Logger.info(sessionId);
+
+        let t = this;
+
+
+        let counter = 12000; // milliseconds
+        let changer = function () {
+            let tag = questionnaire.tagList.getBestTag();
+
+            tag.playCount++;
+            t.changeScene(tag, sessionId);
+
+            Logger.table(questionnaire.tagList.all());
+
+            timeout = setTimeout(changer, counter);
+        };
+
+        let timeout = setTimeout(changer, counter);
+
+    }
+
 
     /**
      * Changes the scene
@@ -77,9 +109,13 @@ class StreamHelper {
         if (!global.rootDirectory) {
             throw new Error('Global variable rootDirectory is not set.');
         }
-        
+
+        if (typeof tag === 'object') {
+            tag = tag.title; // TODO: dirty workaround
+        }
+
         // Filter list on tag
-        const newList = this._getSceneList().filter(function (a) {
+        const newList = this.sceneList.filter(function (a) {
             return a.tag === tag;
         });
 
@@ -107,6 +143,14 @@ class StreamHelper {
 
     set fileHelper(value) {
         this._fileHelper = value;
+    }
+
+    get sceneList() {
+        return this._sceneList;
+    }
+
+    set sceneList(value) {
+        this._sceneList = value;
     }
 }
 
