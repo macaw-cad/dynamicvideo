@@ -1,10 +1,9 @@
-
 // fonts - import
 @import url('https://fonts.googleapis.com/css?family=Bitter|Assistant');
 
 // fonts - declaration
-$ff-primary: 'Assistant';
-$ff-secondary: 'Bitter';
+$ff-primary: 'Assistant', Arial, sans-serif;
+$ff-secondary: 'Bitter', Verdana, sans-serif;
 
 // Colors
 $dark-grey: #222;
