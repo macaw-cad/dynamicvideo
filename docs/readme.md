@@ -7,7 +7,7 @@
 
 ## Prerequisites
 You must have the following software installed:
-- FFmpeg (version >=0.9)
+- FFmpeg
 
 On Windows:
 - The `PATH` variable to your FFmpeg installation should be set.
@@ -67,3 +67,9 @@ The `category-name` names have to correspond with the tags used in the data.json
 The `<generated_hash>` files are playlist files for FFmpeg which are automatically generated.
 
 The filename of the videos cannot contain any spaces!
+For more information about the videos, check the [videos](videos.md) readme.
+
+## Contact
+If you have any questions regarding this project, feel free to contact me with the following contact details:
+- Dennis Volkering
+- dennis.volkering@macaw.nl

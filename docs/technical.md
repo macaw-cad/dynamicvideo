@@ -18,3 +18,4 @@ node-media-server | (needed?) To send the stream to from FFmpeg
 
 
 ##Testing
+Unit testing is done with jest as test suite.
