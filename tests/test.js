@@ -1,58 +1,59 @@
-var assert = require('assert');
-var Questionnaire = require('../models/questionnaire');
+const Questionnaire = require('../models/questionnaire');
 
 describe('Questionnaire', function () {
     let q = new Questionnaire();
 
-    it('should parse json', function () {
-        try {
+    test('should parse json', function () {
+        expect(() => {
             q.parseFileToJson('data/data.json');
-            assert.ok('Works as expected.');
-        } catch (e) {
-            assert.fail('Couldn\'t parse JSON in the main data.json file.');
-        }
+        }).not.toThrow();
     });
 
-    it('should not parse json when source file is corrupt', function () {
-        try {
-            q.parseFileToJson('data/data-error-parse.json');
-            assert.fail('Shouldn\'t pass this function');
-        } catch (e) {
-            assert.deepStrictEqual(e, Error('Couldn\'t parse the JSON'));
-        }
+    test('should not parse json when source file is corrupt', function () {
+        expect(() => {
+            q.parseFileToJson('data/data-error-parse.json')
+        }).toThrow(Error('Couldn\'t parse the JSON'));
     });
 
-    it('should throw error when file does not exist', function () {
-        let filepath = 'path-doesnt-exist';
-        try {
+    test('should throw error when file does not exist', function () {
+        let filepath = 'path-which-doesnt-exist';
+
+        expect(() => {
             q.parseFileToJson(filepath);
-            assert.fail('Shouldn\'t pass this function');
-        } catch (e) {
-            assert.deepStrictEqual(e, Error('Couldn\'t read the file ' + filepath));
-        }
+        }).toThrow(Error('Couldn\'t read the file ' + filepath));
     });
 
 
-    it('should get an error on a question without description', function () {
-        try {
-            q.parseJsonToQuestionList();
-        } catch (e) {
-            assert.deepStrictEqual(e, Error('_description is not set on question 1'));
-        }
-
+    test('should get an error on a question without description', function () {
+        expect(() => {
+            let p = new Questionnaire();
+            p.parseFileToJson('data/data-error-q1-nodescription.json')
+            p.parseJsonToQuestionList();
+        }).toThrow(Error('_description is not set on question 1'));
     });
 });
 
 describe('Answer', function () {
-    it('should parse JSON to a valid answer', function () {
+    test('should parse JSON to a valid answer', function () {
 
 
     });
 });
 
 describe('AnswerList', function () {
-    it('should only contain answers', function () {
+    let q = new Questionnaire();
+
+    test('should only contain answers', function () {
+        expect(() => {
+            q.parseFileToJson('data/data.json');
+            q.parseJsonToAnswerList()
+        }).not.toThrow(Error('Couldn\'t parse JSON in the main data.json file.'));
 
 
+        for (const aIndex in q.answerList.answers) {
+            const answer = q.answerList.answers[aIndex]
+
+            expect(answer.constructor.name).toBe('Answer');
+        }
     });
 });
