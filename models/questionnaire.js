@@ -15,7 +15,6 @@ class Questionnaire {
 
     /**
      *
-     * @param json The JSON source of all the questions
      */
     constructor() {
         this._questionList = new QuestionList();
@@ -23,6 +22,11 @@ class Questionnaire {
         this._tagList = new TagList();
     }
 
+    /**
+     * Parse a JSON file to a JSON object
+     *
+     * @param filepath
+     */
     parseFileToJson(filepath) {
         let text = null;
 
@@ -53,13 +57,12 @@ class Questionnaire {
                 this.questionList.addQuestion(new Question(questions[q]));
             }
         } else {
-            Logger.error('No questions found in JSON file! TODO GOOD LOGGING');
+            Logger.error('No questions found in JSON file!');
         }
     }
 
     /**
      * Parse json to answers
-     * @param answers in JSON format
      */
     parseJsonToAnswerList() {
         const answers = this.json.answers;
@@ -69,7 +72,7 @@ class Questionnaire {
                 this.answerList.addAnswer(new Answer(answers[a]));
             }
         } else {
-            Logger.error('No answers found in JSON file! TODO GOOD LOGGING');
+            Logger.error('No answers found in JSON file!');
         }
     }
 
@@ -102,17 +105,19 @@ class Questionnaire {
     }
 
     /**
+     * Get the next question
      *
      * @returns {null|*}
      */
     getNextQuestion() {
+        // Only get the available questions
         let questions = this.questionList.getAvailableQuestions();
 
         if (questions === null) {
             throw new Error('All questions answered');
         }
 
-        // If there are no answers given
+        // If there are still no answers given
         if (this.answerList.givenAnswers.length === 0) {
             // Choose a random question to start with
             return questions[Math.floor(Math.random() * questions.length)];
@@ -135,12 +140,12 @@ class Questionnaire {
     }
 
     /**
-     * Get a question related to the given answers
-     * TODO: Fix the function name
+     * Process the tags when a answer is given
      *
-     * @param answer The given answer
+     * @param answerId The ID of the given answer
      */
-    processAnswer(answer) {
+    processAnswer(answerId) {
+        const answer = this.answerList.find(answerId);
 
         if (!(answer === null || typeof answer === 'undefined')) {
             try {

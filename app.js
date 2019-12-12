@@ -84,7 +84,7 @@ const nmsConfig = {
         allow_origin: '*'
     }
 };
-
+// All streams: http://localhost:8000/admin/streams
 
 global.rootDirectory = __dirname;
 

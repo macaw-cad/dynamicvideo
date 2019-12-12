@@ -57,3 +57,28 @@ describe('AnswerList', function () {
         }
     });
 });
+
+describe('Tag', function () {
+    let q = new Questionnaire();
+
+    test('', function () {
+            q.parseFileToJson('data/data.json');
+            q.parseJsonToQuestionList();
+            q.parseJsonToAnswerList();
+            q.parseJsonToTagList();
+
+            q.tagList.tags[0].count = 2;
+            q.tagList.tags[1].playCount = 10;
+
+
+
+            expect(q.tagList.getBestTag()).toBe(q.tagList.tags[0]);
+
+        // for (const tIndex in q.tagList.tags) {
+        //     const tag = q.tagList.tags[tIndex];
+        //
+        //
+        //     // expect(answer.constructor.name).toBe('Answer');
+        // }
+    });
+});

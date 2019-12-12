@@ -10,6 +10,14 @@ const Logger = require('../helpers/logger');
 
 
 class IndexController {
+
+    /**
+     * Request for the homepage.
+     * Inits the Questionnaire and renders the index page.
+     *
+     * @param req The request object
+     * @param res The response object
+     */
     index(req, res) {
         Logger.info('Session ID: ' + req.session.id);
 

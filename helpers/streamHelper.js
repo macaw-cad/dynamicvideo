@@ -38,33 +38,32 @@ class StreamHelper {
 
         this.fileHelper.buildRootPlaylist(sessionId);
         const t = this;
+        const outputUrl = 'rtmp://localhost/live/' + sessionId;
 
         // TODO: after refresh this gives an error. Maybe the URL random per session?
-        // ALSO: after session, the ffmpeg session should be ended
+        // TODO: Quit process after session close
 
         // https://github.com/fluent-ffmpeg/node-fluent-ffmpeg
-        ffmpeg(global.rootDirectory + '/video/' + sessionId + '.txt')
+        let stream = ffmpeg(global.rootDirectory + '/video/' + sessionId + '.txt')
             .inputOptions(
                 '-re'
             )
             .addOptions([
                 '-f flv'
             ])
-            .output('rtmp://localhost/live/' + sessionId)
+            .output(outputUrl)
             .noAudio()
-            .videoCodec('libx264') //otherwise it stops after first vid
+            .videoCodec('libx264')
             .on('error', function (s) {
                 Logger.error('Error on ffmpeg process');
-                console.trace(s);
+                throw Error(s);
             })
             .on('end', function () {
                 Logger.info('Merging finished !');
             }).on('start', function (command) {
-            t.setSceneChanger(command, sessionId, questionnaire)
-        })
+                t.setSceneChanger(command, sessionId, questionnaire)
+            })
             .run();
-
-
     }
 
     /**
@@ -89,6 +88,9 @@ class StreamHelper {
 
             Logger.table(questionnaire.tagList.all());
 
+            // if global variable contains session id combined with a variable which says stream is ended, then end this loop
+
+
             timeout = setTimeout(changer, counter);
         };
 
@@ -100,8 +102,8 @@ class StreamHelper {
     /**
      * Changes the scene
      *
-     * @param tag
-     * @param sessionId
+     * @param tag {Tag|string} A tag object or the title of a tag
+     * @param sessionId {string} The ID of the current session
      *
      * @returns {boolean} true if a scene is available, false if not
      */
@@ -110,18 +112,14 @@ class StreamHelper {
             throw new Error('Global variable rootDirectory is not set.');
         }
 
-        if (typeof tag === 'object') {
-            tag = tag.title; // TODO: dirty workaround
-        }
-
         // Filter list on tag
         const newList = this.sceneList.filter(function (a) {
-            return a.tag === tag;
+            return typeof tag === 'object' ? a.tag === tag.title : a.tag === tag;
         });
 
         // return false if list is empty
         if (!(newList.length > 0)) {
-            Logger.warn('There are no available videos to play for tag "' + tag + '".')
+            Logger.warn('There are no available videos to play for tag "' + tag + '".');
             return false;
         }
 

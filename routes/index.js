@@ -13,12 +13,12 @@ router.get('/', function (req, res) {
     indexController.index(req, res);
 });
 
-/* GET get the first question */
-router.get('/api/v1/get-question', function (req, res) {
-    apiController.getQuestion(req, res);
+/* GET get the first question and start the stream */
+router.get('/api/v1/init', function (req, res) {
+    apiController.init(req, res);
 });
 
-/* POST send answer */
+/* POST send answer, process and change the video source */
 router.post('/api/v1/send-answer', function (req, res) {
     apiController.sendAnswer(req, res);
 });

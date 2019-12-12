@@ -15,7 +15,7 @@ init();
  *
  */
 function init() {
-    xhttp.open("GET", "/api/v1/get-question", true);
+    xhttp.open("GET", "/api/v1/init", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     // When there is an ajax call, the xhrChangeListener will be fired

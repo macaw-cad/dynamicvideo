@@ -10,26 +10,42 @@ class ApiController {
 
     /**
      *
-     * @param questionnaire
      * @param sessionId
-     *
-     * @returns {{question: *, success: *, answers: *, message: *}}
+     * @param questionnaire
+     * @returns {{question: *, answers: unknown[] | *, video_id: *}}
+     * @private
      */
-    _returnFirstQuestion(questionnaire, sessionId) {
-        let success = null;
-        let startedStream = false;
-        let msg = '';
+    _returnFirstQuestion(sessionId, questionnaire) {
 
-        //Get question and answers
+        // Get question and answers
         const firstQuestion = questionnaire.getNextQuestion();
-
         firstQuestion.asked = true;
 
         const fqAnswers = questionnaire.answerList.find(firstQuestion.answers);
 
+        return {
+            question: firstQuestion,
+            answers: fqAnswers,
+            video_id: sessionId
+        };
+    }
+
+    /**
+     * Start the video stream with the default video
+     *
+     * @param sessionId The session ID
+     * @param questionnaire
+     * @returns {{success: boolean, started_stream: boolean, message: string}}
+     * @private
+     */
+    _startStream(sessionId, questionnaire) {
         const sh = new StreamHelper();
 
-        // Set the default scene
+        let success = null;
+        let startedStream = false;
+        let msg = '';
+
+        // Create a playlist and set the default scene
         try {
             success = sh.changeScene('default', sessionId);
         } catch (e) {
@@ -44,31 +60,36 @@ class ApiController {
                 sh.startStreaming(sessionId, questionnaire);
                 startedStream = true;
             } catch (e) {
-
+                msg = e;
             }
+        } else {
+            startedStream = false;
         }
 
         return {
             success: success,
             message: msg,
-            question: firstQuestion,
-            answers: fqAnswers,
-            started_stream: startedStream,
-            video_id: sessionId
+            started_stream: startedStream
         };
+
     }
 
     /**
+     * Init the video stream and return the first question with answers
      *
-     *
-     * @param req
-     * @param res
+     * @param req The request body
+     * @param res The response
      */
-    getQuestion(req, res) {
+    init(req, res) {
         const sessionId = req.session.id;
         let questionnaire = req.app.get('questionnaire_' + sessionId);
 
-        res.json(this._returnFirstQuestion(questionnaire, sessionId));
+        res.json(
+            {
+                ...this._returnFirstQuestion(sessionId, questionnaire),
+                ...this._startStream(sessionId, questionnaire)
+            }
+        );
     };
 
     /**
@@ -76,33 +97,28 @@ class ApiController {
      * @param req
      * @param res
      */
-
-
     sendAnswer(req, res) {
         /** @type {Questionnaire} */
         const sessionId = req.session.id;
         let questionnaire = req.app.get('questionnaire_' + sessionId);
         let rawAnswerId = req.body.answer;
         let success = true;
-        let newVideo = false;
         let msg = '';
         const sh = new StreamHelper();
 
         if (typeof rawAnswerId === 'undefined') {
-            // TODO: Answer id is undefined, maybe something went wrong?
-
-            res.json(this._returnFirstQuestion(questionnaire, sessionId));
+            res.json({
+                success: false,
+                message: 'No answer ID given'
+            });
             return;
         }
 
-        // TODO: check if stream/scenelist is set (correct)
-        // TODO: check if answer is given, otherwise give user (browser) feedback
-        const answerId = parseInt(rawAnswerId);
-        const answer = questionnaire.answerList.find(answerId);
-
         // Process the given answer in the questionnaire
-        questionnaire.processAnswer(answer);
+        const answerId = parseInt(rawAnswerId);
+        questionnaire.processAnswer(answerId);
 
+        // Get the next questions and corresponding answers
         let nextQuestion = questionnaire.getNextQuestion();
         let nqAnswers = null;
 
@@ -110,20 +126,19 @@ class ApiController {
         if (!(nextQuestion === null || typeof nextQuestion === 'undefined')) {
             nqAnswers = questionnaire.answerList.find(nextQuestion.answers);
             nextQuestion.asked = true;
+
+            if(nqAnswers === null) {
+                success = false;
+                msg = 'No answers found'
+            }
         } else {
-
-            // TODO Find a nice solution for this
             msg = 'We think we have a pretty accurate view of your interests. Enjoy!';
-            Logger.warn(msg);
             nextQuestion = null;
-            success = false;
         }
-
 
         // return with new question, based on the answer from the client
         res.json(
             {
-                new_video: newVideo,
                 success: success,
                 message: msg,
                 question: nextQuestion,

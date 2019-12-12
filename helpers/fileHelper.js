@@ -11,9 +11,6 @@ class FileHelper {
     constructor() {
     }
 
-    // let dirs = [];
-    // Todo fix the source file, should be an .env option? (just like the output url)
-    // TODO we need to check if the file is an [.mp4] (maybe array of supported video formats?)
     /**
      * Reads the video folder for files, and lists them in an array.
      *
@@ -39,16 +36,18 @@ class FileHelper {
                 results = results.concat(t.getAllFilesFromFolder(file));
             } else {
 
-                // TODO make this an array with supported formats
+                // Check if the file has one of the supported video formats
                 if (supportedVideoFormats.includes(original.slice(original.length - 4))) {
+                    // Tag is the same as the name of the folder
                     const tag = dir.match(/([^\/]*)\/*$/)[1];
+
                     results.push({
                         "tag": tag, // The last directory from the filepath
                         "file": original,
                     });
 
                 } else if (original.slice(original.length - 4) !== '.txt') {
-                    // text files ignored
+                    // text files ignored in logging
                     Logger.log(original + ' is not a supported video file');
                 }
             }

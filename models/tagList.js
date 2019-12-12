@@ -83,6 +83,7 @@ class TagList {
             }
         );
 
+        // The tag with the most count and least playcount will be returned.
         return sorted[0];
     }
 

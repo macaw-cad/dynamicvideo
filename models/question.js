@@ -22,23 +22,6 @@ class Question {
     }
 
     /**
-     * Map the answer ID's to answer objects.
-     *
-     * @param question
-     * @param answers
-     */
-    static mapAnswers(question, answers) {
-
-        // TODO: We need the correct answers as input, otherwise it won't map the answer to the question object
-        question.answers = question.answers.map(function (q) {
-            return answers.find(function (a) {
-                return a.id === q;
-            });
-        });
-    }
-
-
-    /**
      * Parse JSON to a Question object
      *
      * @param json
