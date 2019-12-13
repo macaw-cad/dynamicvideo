@@ -4,9 +4,11 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('poc-stream:server');
-var http = require('http');
+const app = require('../app');
+const debug = require('debug')('poc-stream:server');
+const http = require('http');
+const NodeMediaServer = require('node-media-server');
+
 require('dotenv').config();
 
 /**
@@ -20,6 +22,12 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+/**
+ * Create Media server
+ */
+
+startMediaServer();
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -87,4 +95,37 @@ function onListening() {
         ? 'pipe ' + addr
         : 'port ' + addr.port;
     debug('Listening on ' + bind);
+}
+
+
+function startMediaServer() {
+
+
+// Start mediaserver
+    const nmsConfig = {
+        rtmp: {
+            port: process.env.RTMP_PORT,
+            chunk_size: process.env.RTMP_CHUNK_SIZE,
+            gop_cache: true,
+            ping: process.env.RTMP_PING,
+            ping_timeout: 60
+        },
+        http: {
+            port: process.env.HTTP_PORT,
+            allow_origin: '*'
+        }
+    };
+    // All streams: http://localhost:8000/admin/streams
+
+
+    var nms = new NodeMediaServer(nmsConfig);
+    nms.run();
+
+    nms.on('doneConnect', (id, args) => {
+        console.log(args);
+        //Sess id available in args
+
+        // Clean all mess from session
+        // Clean up ffmpeg process
+    });
 }

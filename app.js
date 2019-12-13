@@ -1,20 +1,18 @@
 "use strict";
 
-var env = require('dotenv').config();
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var sassMiddleware = require('node-sass-middleware');
-var session = require('express-session')
+const env = require('dotenv').config();
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const sassMiddleware = require('node-sass-middleware');
+const session = require('express-session');
 
 
-// Declare NMS
-const NodeMediaServer = require('node-media-server');
-var indexRouter = require('./routes/index');
+const indexRouter = require('./routes/index');
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -69,35 +67,7 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 
-
-// Start mediaserver
-const nmsConfig = {
-    rtmp: {
-        port: process.env.RTMP_PORT,
-        chunk_size: process.env.RTMP_CHUNK_SIZE,
-        gop_cache: true,
-        ping: process.env.RTMP_PING,
-        ping_timeout: 60
-    },
-    http: {
-        port: process.env.HTTP_PORT,
-        allow_origin: '*'
-    }
-};
-// All streams: http://localhost:8000/admin/streams
-
 global.rootDirectory = __dirname;
 
-
-var nms = new NodeMediaServer(nmsConfig);
-nms.run();
-
-nms.on('doneConnect', (id, args) => {
-    console.log(args);
-    //Sess id available in args
-
-    // Clean all mess from session
-    // Clean up ffmpeg process
-});
 
 module.exports = app;

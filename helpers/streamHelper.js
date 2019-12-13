@@ -1,7 +1,7 @@
 "use strict";
 
-var fs = require("fs");
-let ffmpeg = require('fluent-ffmpeg');
+const fs = require("fs");
+const ffmpeg = require('fluent-ffmpeg');
 const FileHelper = require('./fileHelper');
 const Logger = require('./logger');
 
@@ -29,14 +29,26 @@ class StreamHelper {
     }
 
     /**
+     * Start the video stream
      *
+     * @param sessionId
+     * @param questionnaire
      */
     startStreaming(sessionId, questionnaire) {
         if (!global.rootDirectory) {
             throw new Error('Global variable rootDirectory is not set.');
         }
 
-        this.fileHelper.buildRootPlaylist(sessionId);
+        // Create a playlist and set the default scene
+        try {
+            this.changeScene('default', sessionId);
+            this.fileHelper.buildRootPlaylist(sessionId);
+        } catch (e) {
+            Logger.error('Error while setting the default scene:' + e);
+            //throw?
+        }
+
+        // Save "this" to t so we can use this in the ffmpeg scope
         const t = this;
         const outputUrl = 'rtmp://localhost/live/' + sessionId;
 
@@ -44,7 +56,7 @@ class StreamHelper {
         // TODO: Quit process after session close
 
         // https://github.com/fluent-ffmpeg/node-fluent-ffmpeg
-        let stream = ffmpeg(global.rootDirectory + '/video/' + sessionId + '.txt')
+        ffmpeg(global.rootDirectory + '/video/' + sessionId + '.txt')
             .inputOptions(
                 '-re'
             )
@@ -60,7 +72,8 @@ class StreamHelper {
             })
             .on('end', function () {
                 Logger.info('Merging finished !');
-            }).on('start', function (command) {
+            })
+            .on('start', function (command) {
                 t.setSceneChanger(command, sessionId, questionnaire)
             })
             .run();

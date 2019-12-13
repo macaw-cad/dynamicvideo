@@ -26,11 +26,13 @@ class FileHelper {
         let results = [];
 
         fs.readdirSync(dir).forEach(function (file) {
+            // keep the original filename
             let original = file;
 
             file = dir + '/' + file;
             let stat = fs.statSync(file);
 
+            // Check if the selected object is a file or directory.
             if (stat && stat.isDirectory()) {
                 // Recursive
                 results = results.concat(t.getAllFilesFromFolder(file));

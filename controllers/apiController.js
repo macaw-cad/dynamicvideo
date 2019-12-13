@@ -41,29 +41,17 @@ class ApiController {
     _startStream(sessionId, questionnaire) {
         const sh = new StreamHelper();
 
-        let success = null;
+        let success = false;
         let startedStream = false;
         let msg = '';
 
-        // Create a playlist and set the default scene
         try {
-            success = sh.changeScene('default', sessionId);
+            // Now start the stream
+            sh.startStreaming(sessionId, questionnaire);
+            startedStream = true;
+            success = true;
         } catch (e) {
-            Logger.error('Error while setting the default scene:' + e);
-            success = false;
-            msg = e.toString();
-        }
-
-        if (success) {
-            try {
-                // Now start the stream
-                sh.startStreaming(sessionId, questionnaire);
-                startedStream = true;
-            } catch (e) {
-                msg = e;
-            }
-        } else {
-            startedStream = false;
+            msg = e;
         }
 
         return {
@@ -127,7 +115,7 @@ class ApiController {
             nqAnswers = questionnaire.answerList.find(nextQuestion.answers);
             nextQuestion.asked = true;
 
-            if(nqAnswers === null) {
+            if (nqAnswers === null) {
                 success = false;
                 msg = 'No answers found'
             }
