@@ -1,4 +1,7 @@
 const Questionnaire = require('../models/questionnaire');
+const request = require('supertest');
+const app = require('../app');
+const Logger = require('../helpers/logger');
 
 describe('Questionnaire', function () {
     let q = new Questionnaire();
@@ -62,23 +65,40 @@ describe('Tag', function () {
     let q = new Questionnaire();
 
     test('', function () {
-            q.parseFileToJson('data/data.json');
-            q.parseJsonToQuestionList();
-            q.parseJsonToAnswerList();
-            q.parseJsonToTagList();
+        q.parseFileToJson('data/data.json');
+        q.parseJsonToQuestionList();
+        q.parseJsonToAnswerList();
+        q.parseJsonToTagList();
 
-            q.tagList.tags[0].count = 2;
-            q.tagList.tags[1].playCount = 10;
+        q.tagList.tags[0].count = 2;
+        q.tagList.tags[1].playCount = 10;
+        q.tagList.tags[3].count = 1;
 
+        expect(q.tagList.getBestTag()).toBe(q.tagList.tags[0]);
+    });
+});
 
+describe('Test the server', () => {
+    test('Should response to the GET method', (done) => {
+        request(app).get('/').then((response) => {
+            expect(response.statusCode).toBe(200);
+            done();
+        });
+    });
 
-            expect(q.tagList.getBestTag()).toBe(q.tagList.tags[0]);
+    test('Should give JSON as response in API', (done) => {
+        request(app).post('/api/v1/send-answer').then((response) => {
+            expect(response.statusCode).toBe(200);
+            expect(response.type).toBe('application/json');
+            done();
+        });
+    });
 
-        // for (const tIndex in q.tagList.tags) {
-        //     const tag = q.tagList.tags[tIndex];
-        //
-        //
-        //     // expect(answer.constructor.name).toBe('Answer');
-        // }
+    test('Should give an error while not sending information', (done) => {
+        request(app).post('/api/v1/send-answer').then((response) => {
+            expect(response.body.success).toBe(false);
+            expect(response.body.message).toBe('No answer ID given');
+            done();
+        });
     });
 });
