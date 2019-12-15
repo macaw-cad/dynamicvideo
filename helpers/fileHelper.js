@@ -25,6 +25,11 @@ class FileHelper {
         const t = this;
         let results = [];
 
+        // Check if the directory is available
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+        }
+
         fs.readdirSync(dir).forEach(function (file) {
             // keep the original filename
             let original = file;
