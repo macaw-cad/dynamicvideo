@@ -2,6 +2,7 @@
 
 const fs = require("fs");
 const ffmpeg = require('fluent-ffmpeg');
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 const FileHelper = require('./fileHelper');
 const Logger = require('./logger');
 
@@ -57,6 +58,7 @@ class StreamHelper {
 
         // https://github.com/fluent-ffmpeg/node-fluent-ffmpeg
         ffmpeg(global.rootDirectory + '/video/' + sessionId + '.txt')
+            .setFfmpegPath(ffmpegPath)
             .inputOptions(
                 '-re'
             )

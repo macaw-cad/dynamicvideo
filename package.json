@@ -16,6 +16,7 @@
   ],
   "author": "Dennis Volkering",
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.0.20",
     "chalk": "^3.0.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
