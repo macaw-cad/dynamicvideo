@@ -232,6 +232,12 @@ describe('FileHelper and StreamHelper', () => {
 
 
 describe('Test the server', () => {
+    // First create the video folder, otherwise the server will return 500 errors
+    const videoDir = global.rootDirectory + '/video/';
+    if (!fs.existsSync(videoDir)) {
+        fs.mkdirSync(videoDir);
+    }
+
     test('Should response to the GET method', (done) => {
         request(app).get('/').then((response) => {
             expect(response.statusCode).toBe(200);
