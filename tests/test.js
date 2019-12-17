@@ -188,17 +188,11 @@ describe('FileHelper and StreamHelper', () => {
         throw new Error('Global variable rootDirectory is not set.');
     }
 
-    test('Should create a video playlist', function () {
+    test('Should not change a video playlist when scene is not available', function () {
         const sessId = 'sample-session-id';
         const sh = new StreamHelper();
 
-        expect(sh.changeScene('default', sessId)).toBe(true);
-
-        // Check if it can read the file
-        expect(() => {
-            fs.readFileSync(global.rootDirectory + '/video/' + sessId + '_playlist.txt');
-        }).not.toThrow();
-
+        expect(sh.changeScene('abcdef', sessId)).toBe(false);
     });
 
     test('Should create a the root playlist with expected contents', function () {
