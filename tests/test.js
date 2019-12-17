@@ -9,6 +9,11 @@ const request = require('supertest');
 const app = require('../app');
 const fs = require('fs');
 
+// First create the video folder, otherwise the server will return 500 errors
+const videoDir = global.rootDirectory + '/video/';
+if (!fs.existsSync(videoDir)) {
+    fs.mkdirSync(videoDir);
+}
 
 describe('Questionnaire', function () {
     let q = new Questionnaire();
@@ -232,11 +237,6 @@ describe('FileHelper and StreamHelper', () => {
 
 
 describe('Test the server', () => {
-    // First create the video folder, otherwise the server will return 500 errors
-    const videoDir = global.rootDirectory + '/video/';
-    if (!fs.existsSync(videoDir)) {
-        fs.mkdirSync(videoDir);
-    }
 
     test('Should response to the GET method', (done) => {
         request(app).get('/').then((response) => {
