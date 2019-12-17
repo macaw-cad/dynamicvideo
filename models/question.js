@@ -54,6 +54,7 @@ class Question {
                 throw Error("Empty array in question " + this._id);
             }
         }
+        return true;
     }
 
     /**

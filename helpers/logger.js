@@ -26,9 +26,12 @@ class Logger {
         console.error(chalk.bgRed.whiteBright('ERROR:') + ' ' + chalk.red(message));
     }
 
-
     static table(message) {
         console.table(message);
+    }
+
+    static trace(message) {
+        console.trace(message);
     }
 
 }

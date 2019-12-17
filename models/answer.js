@@ -37,6 +37,7 @@ class Answer {
                 throw Error("Empty array in answer " + this._id);
             }
         }
+        return true;
     }
 
     /**

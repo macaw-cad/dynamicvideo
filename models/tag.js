@@ -67,6 +67,7 @@ class Tag {
                 throw Error(this._requiredFields[prop] + " is not set on tag " + this._id);
             }
         }
+        return true;
     }
 }
 

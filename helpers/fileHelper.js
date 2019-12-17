@@ -27,7 +27,9 @@ class FileHelper {
 
         // Check if the directory is available
         if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir);
+            Logger.warn('The video folder doesn\'t exist. Before playing videos is possible, add videos to the video folder as described in the documentation.');
+
+            throw new Error(dir + ' - folder not found')
         }
 
         fs.readdirSync(dir).forEach(function (file) {
@@ -79,12 +81,13 @@ class FileHelper {
      * @param text
      */
     changeFileContents(source, text) {
-        fs.writeFile(source, text, (err => {
+        fs.writeFileSync(source, text, (err => {
             if (err)
                 throw err;
+
+            Logger.info(source + ' successful created.');
         }));
     }
-
 }
 
 module.exports = FileHelper;

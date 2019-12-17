@@ -8,6 +8,7 @@ const app = require('../app');
 const debug = require('debug')('poc-stream:server');
 const http = require('http');
 const NodeMediaServer = require('node-media-server');
+const Logger = require('../helpers/logger');
 
 require('dotenv').config();
 
@@ -118,12 +119,12 @@ function startMediaServer() {
     // All streams: http://localhost:8000/admin/streams
 
 
-    var nms = new NodeMediaServer(nmsConfig);
+    const nms = new NodeMediaServer(nmsConfig);
     nms.run();
 
     nms.on('doneConnect', (id, args) => {
-        console.log(args);
-        //Sess id available in args
+        // Sess id available in args
+        Logger.info('Ended stream ' + args.streamPath);
 
         // Clean all mess from session
         // Clean up ffmpeg process
