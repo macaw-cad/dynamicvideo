@@ -67,7 +67,6 @@
       "id": 0,
       "desc": "All inclusive",
       "tags": [
-        "all-inclusive",
         "relax"
       ]
     },
@@ -81,7 +80,7 @@
     },
     {
       "id": 2,
-      "desc": "Swimming",
+      "desc": "Swimming and relaxing",
       "tags": [
         "relax",
         "swimming"
@@ -89,11 +88,10 @@
     },
     {
       "id": 3,
-      "desc": "Hiking",
+      "desc": "Extreme sports",
       "tags": [
         "adventure",
         "sport",
-        "hiking",
         "nature"
       ]
     },
@@ -102,7 +100,6 @@
       "desc": "Visiting a museum",
       "tags": [
         "culture",
-        "museum",
         "city"
       ]
     },
@@ -111,7 +108,6 @@
       "desc": "Partying",
       "tags": [
         "party",
-        "alcohol",
         "city"
       ]
     },
@@ -129,7 +125,6 @@
       "desc": "At a cruise",
       "tags": [
         "cruise",
-        "boat",
         "relax"
       ]
     },
@@ -137,15 +132,13 @@
       "id": 8,
       "desc": "Nature",
       "tags": [
-        "nature",
-        "adventure"
+        "nature"
       ]
     },
     {
       "id": 9,
       "desc": "City trip",
       "tags": [
-        "city-trip",
         "city"
       ]
     },
@@ -153,9 +146,7 @@
       "id": 10,
       "desc": "Cold",
       "tags": [
-        "cold",
-        "winter",
-        "christmas"
+        "cold"
       ]
     },
     {
@@ -185,7 +176,6 @@
       "id": 14,
       "desc": "Boat",
       "tags": [
-        "boat",
         "cruise"
       ]
     }
