@@ -86,6 +86,15 @@ class AnswerList {
     set givenAnswers(ga) {
         this._givenAnswers = ga;
     }
+
+    _isValid() {
+        for (const aIndex in this.answers) {
+            if (this.answers[aIndex].constructor.name !== 'Answer') {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 
 module.exports = AnswerList;

@@ -57,12 +57,17 @@ describe('AnswerList', function () {
             q.parseJsonToAnswerList()
         }).not.toThrow(Error('Couldn\'t parse JSON in the main data.json file.'));
 
+        expect(q.answerList._isValid()).toBe(true);
+    });
 
-        for (const aIndex in q.answerList.answers) {
-            const answer = q.answerList.answers[aIndex]
+    test('Should only contain answers', function () {
+        expect(() => {
+            q.parseFileToJson('data/data.json');
+            q.parseJsonToAnswerList()
+            q.answerList.addAnswer(new Tag({id: 1, title: 'invalid'}))
+        }).not.toThrow(Error('Couldn\'t parse JSON in the main data.json file.'));
 
-            expect(answer.constructor.name).toBe('Answer');
-        }
+        expect(q.answerList._isValid()).toBe(false);
     });
 
     test('Should find the correct Answer in the AnswerList', function () {

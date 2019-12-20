@@ -12,7 +12,7 @@ const answersContainer = document.getElementById("answers_container");
 init();
 
 /**
- *
+ * Get the video URL and first question with answers
  */
 function init() {
     xhttp.open("GET", "/api/v1/init", true);
@@ -25,7 +25,7 @@ function init() {
 
 
 /**
- *
+ * Listen to the button
  */
 function buttonListener() {
     xhttp.open("POST", "/api/v1/send-answer", true);
@@ -34,12 +34,12 @@ function buttonListener() {
 }
 
 /**
- *
+ * If there is a change in the XHTTP, this function will be fired
+ * Init the video & append question with answers
  */
 function xhrChangeListener() {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
         const json = JSON.parse(this.response);
-        const startedStream = json.started_stream;
         const videoId = json.video_id;
         const question = json.question;
         const answers = json.answers;
@@ -50,22 +50,20 @@ function xhrChangeListener() {
             initVideo(videoId);
         }
 
-        // todo check if json is valid
-
-
         clearFields();
-
 
         if (typeof question !== 'undefined' && success) {
 
+            // Show question
             appendQuestion(question._description);
 
+            // Show answers
             for (let i in question._answers) {
                 appendAnswer(answers[i]._id, answers[i]._description).onclick = buttonListener;
             }
 
         } else {
-            // TODO Make this user friendly
+            // Alert the user with the error
             alert(message);
         }
     }
@@ -110,23 +108,22 @@ function clearFields() {
 }
 
 /**
- * Video
+ * Initialize the video element
  */
 function initVideo(videoId) {
-
-    // TODO make this robust
-    // TODO fix URL
     if (flvjs.isSupported()) {
         console.log('FLV is supported');
         const videoElement = document.getElementById('video_element');
         const flvPlayer = flvjs.createPlayer({
             type: 'flv',
             isLive: true,
-            url: 'http://localhost:8000/live/' + videoId + '.flv'
+            url: window.location.protocol + '//' + window.location.hostname + ':8000/live/' + videoId + '.flv'
         });
         flvPlayer.attachMediaElement(videoElement);
         flvPlayer.load();
         flvPlayer.play();
+    } else {
+        alert('Video player could not be initialized.');
     }
 }
 

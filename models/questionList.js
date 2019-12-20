@@ -20,7 +20,6 @@ class QuestionList {
         this.questions.push(question);
     }
 
-
     /**
      *
      * @returns {*|null}
