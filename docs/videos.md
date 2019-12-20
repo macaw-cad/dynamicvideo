@@ -31,6 +31,8 @@ Some tips:
 Cutting videos can be done with the following command:
 ```bash
 ffmpeg -ss 00:01:00 -i input.mp4 -to 00:02:00 -c copy output.mp4
+# or, if the first option doesn't work for you:
+ffmpeg -noaccurate_seek -ss 00:00:01.0 -i input.mp4 -to 00:00:10.0 -c copy output.mp4
 ```
 
 Compressing videos can be done with the following command:

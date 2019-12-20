@@ -24,6 +24,8 @@ class IndexController {
         let q = this._setQuestionnaire();
         req.app.set('questionnaire_' + req.session.id, q);
 
+        Logger.table(q.tagList.all());
+
         res.render('index', {title: 'Livestream'});
     };
 

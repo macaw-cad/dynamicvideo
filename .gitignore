@@ -71,4 +71,4 @@ public/stylesheets/style.css.map
 tests/*.xml
 
 # playlists
-video/*
+video/*.txt
