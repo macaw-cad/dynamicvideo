@@ -14,7 +14,7 @@ On Windows:
 
 ## Installation
 Rename (or copy) `.env.example` to `.env` and change it according to your needs.
-Some video's may be needed. They can be placed in the `video` folder.
+Some video's are needed. They can be placed in the `video` folder. A `default` folder within the video folder is required to play the first scene.
 
 After setting up the environment variables and add videos to the `video` folder, you can run the following commands to
 install everything and run the program.
@@ -68,6 +68,14 @@ The `<generated_hash>` files are playlist files for FFmpeg which are automatical
 
 The filename of the videos cannot contain any spaces!
 For more information about the videos, check the [videos](videos.md) readme.
+
+## Possible improvements
+- Create a video object which is connected to a video file, and choose video objects based on multiple tags (and then play them).
+- Use WebRTC for lower latency (lol)
+
+## Known bugs
+- FFmpeg sessions are not closed and playlists are not removed
+- After a page refresh FFmpeg wants to stream the video to the the previous session URL
 
 ## Contact
 If you have any questions regarding this project, feel free to contact me with the following contact details:
