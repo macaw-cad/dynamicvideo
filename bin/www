@@ -9,6 +9,7 @@ const debug = require('debug')('poc-stream:server');
 const http = require('http');
 const NodeMediaServer = require('node-media-server');
 const Logger = require('../helpers/logger');
+const FileHelper = require('../helpers/fileHelper');
 
 require('dotenv').config();
 
@@ -122,11 +123,22 @@ function startMediaServer() {
     const nms = new NodeMediaServer(nmsConfig);
     nms.run();
 
-    nms.on('doneConnect', (id, args) => {
-        // Sess id available in args
-        Logger.info('Ended stream ' + args.streamPath);
+    nms.on('donePlay', (id, args) => {
+        const fh = new FileHelper();
 
-        // Clean all mess from session
-        // Clean up ffmpeg process
+        const sessId = args.replace('/live/', '');
+        Logger.info('Ended stream with session ID ' + sessId);
+
+
+        if(typeof sessId === 'undefined') {
+            Logger.error('Session ID could not be found');
+        }
+
+        // Empty the playlists so FFmpeg will end
+        fh.changeFileContents(global.rootDirectory + '/video/' + sessId + '.txt', '');
+        fh.changeFileContents(global.rootDirectory + '/video/' + sessId + '_playlist.txt', '');
+
+        // Prepare questionnaire for removal
+        app.get('questionnaire_' + sessId).needsRemoval = true;
     });
 }

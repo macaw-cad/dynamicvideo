@@ -12,7 +12,6 @@ const Logger = require('../helpers/logger');
 
 class Questionnaire {
 
-
     /**
      *
      */
@@ -20,6 +19,7 @@ class Questionnaire {
         this._questionList = new QuestionList();
         this._answerList = new AnswerList();
         this._tagList = new TagList();
+        this._needsRemoval = false;
     }
 
     /**
@@ -212,7 +212,13 @@ class Questionnaire {
         this._json = value;
     }
 
+    get needsRemoval() {
+        return this._needsRemoval;
+    }
 
+    set needsRemoval(value) {
+        this._needsRemoval = value;
+    }
 }
 
 module.exports = Questionnaire;

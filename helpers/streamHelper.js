@@ -1,6 +1,6 @@
 "use strict";
 
-const fs = require("fs");
+const fs = require('fs');
 const ffmpeg = require('fluent-ffmpeg');
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 const FileHelper = require('./fileHelper');
@@ -57,6 +57,7 @@ class StreamHelper {
         // TODO: Quit process after session close
 
         // https://github.com/fluent-ffmpeg/node-fluent-ffmpeg
+
         ffmpeg(global.rootDirectory + '/video/' + sessionId + '.txt')
             .setFfmpegPath(ffmpegPath)
             .inputOptions(
@@ -73,7 +74,7 @@ class StreamHelper {
                 throw Error(s);
             })
             .on('end', function () {
-                Logger.info('Merging finished !');
+                Logger.info('Done streaming!');
             })
             .on('start', function (command) {
                 t.setSceneChanger(command, sessionId, questionnaire)
@@ -88,29 +89,30 @@ class StreamHelper {
      * @param questionnaire
      */
     setSceneChanger(commandLine, sessionId, questionnaire) {
-        Logger.info('Spawned Ffmpeg with command: ' + commandLine)
-        Logger.info(sessionId);
+        Logger.info('Spawned Ffmpeg with command: ' + commandLine);
 
-        let t = this;
+        const t = this;
+        let counter = 10000; // milliseconds
 
-
-        let counter = 12000; // milliseconds
         let changer = function () {
+            // Get the best tag available
             let tag = questionnaire.tagList.getBestTag();
 
+            // Increase the amount of plays and change the scene
             tag.playCount++;
             t.changeScene(tag, sessionId);
 
-            Logger.table(questionnaire.tagList.all());
-
-            // if global variable contains session id combined with a variable which says stream is ended, then end this loop
-
-
-            timeout = setTimeout(changer, counter);
+            // Call the function again after X seconds
+            if(questionnaire.needsRemoval !== true) {
+                timeout = setTimeout(changer, counter);
+            } else {
+                Logger.info('Ended SceneChanger!');
+                questionnaire = undefined;
+                clearTimeout(timeout);
+            }
         };
 
         let timeout = setTimeout(changer, counter);
-
     }
 
 
@@ -134,7 +136,7 @@ class StreamHelper {
 
         // return false if list is empty
         if (!(newList.length > 0)) {
-            Logger.warn('There are no available videos to play for tag "' + tag + '".');
+            Logger.warn('There are no available videos to play for tag "' + (typeof tag === 'object' ? tag.title : tag) + '".');
             return false;
         }
 
