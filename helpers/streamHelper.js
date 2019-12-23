@@ -95,15 +95,23 @@ class StreamHelper {
         let counter = 10000; // milliseconds
 
         let changer = function () {
-            // Get the best tag available
-            let tag = questionnaire.tagList.getBestTag();
+            let tag = '';
+            // If there are still no answers given
+            if (questionnaire.answerList.givenAnswers.length === 0) {
+                // Choose a random question to start with
+                tag = 'default';
+            } else {
+                // Get the best tag available
+                tag = questionnaire.tagList.getBestTag();
 
-            // Increase the amount of plays and change the scene
-            tag.playCount++;
+                // Increase the amount of plays and change the scene
+                tag.playCount++;
+            }
+
             t.changeScene(tag, sessionId);
 
             // Call the function again after X seconds
-            if(questionnaire.needsRemoval !== true) {
+            if (questionnaire.needsRemoval !== true) {
                 timeout = setTimeout(changer, counter);
             } else {
                 Logger.info('Ended SceneChanger!');

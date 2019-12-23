@@ -125,12 +125,11 @@ function startMediaServer() {
 
     nms.on('donePlay', (id, args) => {
         const fh = new FileHelper();
-
         const sessId = args.replace('/live/', '');
+
         Logger.info('Ended stream with session ID ' + sessId);
 
-
-        if(typeof sessId === 'undefined') {
+        if (typeof sessId === 'undefined') {
             Logger.error('Session ID could not be found');
         }
 
