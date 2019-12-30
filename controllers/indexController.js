@@ -20,11 +20,16 @@ class IndexController {
      */
     index(req, res) {
         Logger.info('Session ID: ' + req.session.id);
+        let oldQuestionnaire = req.app.get('questionnaire_' + req.session.id);
 
-        let q = this._setQuestionnaire();
-        req.app.set('questionnaire_' + req.session.id, q);
-
-        Logger.table(q.tagList.all());
+        Logger.table(oldQuestionnaire);
+        if (typeof oldQuestionnaire !== "undefined") {
+            oldQuestionnaire.refreshed = true;
+        } else {
+            let q = this._setQuestionnaire();
+            req.app.set('questionnaire_' + req.session.id, q);
+            Logger.table(q.tagList.all());
+        }
 
         res.render('index', {title: 'Livestream'});
     };

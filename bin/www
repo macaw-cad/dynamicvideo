@@ -133,11 +133,19 @@ function startMediaServer() {
             Logger.error('Session ID could not be found');
         }
 
+        let q = app.get('questionnaire_' + sessId);
+
+        if (q.refreshed) {
+            Logger.info('It was just a refresh, session will not be ended.');
+            q.refreshed = false;
+            return;
+        }
+
         // Empty the playlists so FFmpeg will end
         fh.changeFileContents(global.rootDirectory + '/video/' + sessId + '.txt', '');
         fh.changeFileContents(global.rootDirectory + '/video/' + sessId + '_playlist.txt', '');
 
         // Prepare questionnaire for removal
-        app.get('questionnaire_' + sessId).needsRemoval = true;
+        q.needsRemoval = true;
     });
 }

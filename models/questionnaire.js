@@ -20,6 +20,7 @@ class Questionnaire {
         this._answerList = new AnswerList();
         this._tagList = new TagList();
         this._needsRemoval = false;
+        this._refreshed = false;
     }
 
     /**
@@ -218,6 +219,14 @@ class Questionnaire {
 
     set needsRemoval(value) {
         this._needsRemoval = value;
+    }
+
+    get refreshed() {
+        return this._refreshed;
+    }
+
+    set refreshed(value) {
+        this._refreshed = value;
     }
 }
 
