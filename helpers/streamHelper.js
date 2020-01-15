@@ -92,7 +92,7 @@ class StreamHelper {
         Logger.info('Spawned Ffmpeg with command: ' + commandLine);
 
         const t = this;
-        let counter = 10000; // milliseconds
+        let counter = 5000; // milliseconds
 
         let changer = function () {
             let tag = '';
@@ -108,6 +108,7 @@ class StreamHelper {
                 tag.playCount++;
             }
 
+            console.table(questionnaire.tagList.all());
             t.changeScene(tag, sessionId);
 
             // Call the function again after X seconds
