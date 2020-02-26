@@ -3,14 +3,12 @@
 > A proof of concept which shows the possibilities for changing a streaming video on the server directly from the browser.
 
 ## Features
-
+- Automatically installs FFmpeg within the project
+- Chooses video based on the given answers
 
 ## Prerequisites
 You must have the following software installed:
-- FFmpeg
-
-On Windows:
-- The `PATH` variable to your FFmpeg installation should be set.
+- npm
 
 ## Installation
 Rename (or copy) `.env.example` to `.env` and change it according to your needs.
@@ -42,42 +40,40 @@ The data.json file should be structured like this:
 The questions array should contain only questions. Every question is an object and structured as follows:
 - id `int`
 - desc `string`
-- answers `array:int` (refers to answer->id)
-- based_on `array:string` (refers to answer->tags)
+- answers `array:answer`
 
 The answers array should contain only answers. Every answer is an object and structured as follows:
 - id `int`
 - desc `string`
 - tags `array:string`
 
+The array with videos will attach the tags to video files.
+- source `string`
+- tags `array:string`
+
+
 ## Videos
 The videos are stored in the `video` folder with the following file structure:
-- category-name
-    - 1.mp4
-    - video_2.mp4
-    - 3rd-video.mp4
-- category-name
-    - video.flv
-    - ....
+- 1.mp4
+- video_2.mp4
+- 3rd-video.mp4
 - `<generated_hash>.txt`
 - `<generated_hash_playlist.txt>`
 
-At the moment of writing, subdirectories within the category folders are not supported.
-The `category-name` names have to correspond with the tags used in the data.json.
+At the moment of writing, subdirectories are not supported.
+The `video` files have to correspond with the video sources used in the data.json.
 The `<generated_hash>` files are playlist files for FFmpeg which are automatically generated.
 
 The filename of the videos cannot contain any spaces!
 For more information about the videos, check the [videos](videos.md) readme.
 
 ## Possible improvements
-- Create a video object which is connected to a video file, and choose video objects based on multiple tags (and then play them).
 - Use WebRTC for lower latency (lol)
 
 ## Known bugs
-- FFmpeg sessions are not closed and playlists are not removed
 - After a page refresh FFmpeg wants to stream the video to the the previous session URL
 
 ## Contact
-If you have any questions regarding this project, feel free to contact me with the following contact details:
-- Dennis Volkering
-- dennis.volkering@macaw.nl
+If you have any questions regarding this project, feel free to contact me
+
+Dennis Volkering
