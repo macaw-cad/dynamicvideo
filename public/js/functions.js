@@ -42,7 +42,6 @@ function xhrChangeListener() {
         const json = JSON.parse(this.response);
         const videoId = json.video_id;
         const question = json.question;
-        const answers = json.answers;
         const success = json.success;
         const message = json.message;
 
@@ -56,10 +55,11 @@ function xhrChangeListener() {
 
             // Show question
             appendQuestion(question._description);
+            console.log(question._answers);
 
             // Show answers
             for (let i in question._answers) {
-                appendAnswer(answers[i]._id, answers[i]._description).onclick = buttonListener;
+                appendAnswer(question._answers[i].id, question._answers[i].desc).onclick = buttonListener;
             }
 
         } else {

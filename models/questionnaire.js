@@ -7,6 +7,8 @@ const Answer = require('./answer');
 const AnswerList = require('./answerList');
 const Tag = require('./tag');
 const TagList = require('./tagList');
+const Video = require('./video');
+const VideoList = require('./videoList');
 const Logger = require('../helpers/logger');
 
 
@@ -19,6 +21,7 @@ class Questionnaire {
         this._questionList = new QuestionList();
         this._answerList = new AnswerList();
         this._tagList = new TagList();
+        this._videoList = new VideoList();
         this._needsRemoval = false;
         this._refreshed = false;
     }
@@ -66,11 +69,33 @@ class Questionnaire {
      * Parse json to answers
      */
     parseJsonToAnswerList() {
-        const answers = this.json.answers;
+        const questions = this.json.questions;
 
-        if ('undefined' !== typeof answers) {
-            for (let a in answers) {
-                this.answerList.addAnswer(new Answer(answers[a]));
+        Logger.table(questions);
+
+        if ('undefined' !== typeof questions) {
+            for (let q in questions) {
+                let answers = questions[q].answers;
+
+                for (let a in answers) {
+                    this.answerList.addAnswer(new Answer(answers[a]));
+                }
+            }
+
+            Logger.table(this.answerList.answers);
+        } else {
+            Logger.error('No answers found in JSON file!');
+        }
+    }
+    /**
+     * Parse json to videos
+     */
+    parseJsonToVideoList() {
+        const videos = this.json.videos;
+
+        if ('undefined' !== typeof videos) {
+            for (let v in videos) {
+                this.videoList.addVideo(new Video(videos[v]));
             }
         } else {
             Logger.error('No answers found in JSON file!');
@@ -82,8 +107,7 @@ class Questionnaire {
      * Get all the tags from the available answers
      */
     parseJsonToTagList() {
-        const answers = this.json.answers;
-
+        const answers = this.answerList.answers;
 
         if ('undefined' !== typeof answers) {
             let i = 0;
@@ -126,6 +150,7 @@ class Questionnaire {
 
         //test
 
+        // Return random question
         return questions[Math.floor(Math.random() * questions.length)];
 
         // TODO: Make this better.
@@ -203,6 +228,10 @@ class Questionnaire {
      */
     get tagList() {
         return this._tagList;
+    }
+
+    get videoList() {
+        return this._videoList;
     }
 
     get json() {

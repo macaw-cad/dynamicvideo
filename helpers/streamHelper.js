@@ -13,20 +13,6 @@ class StreamHelper {
      */
     constructor() {
         this.fileHelper = new FileHelper();
-        this._sceneList = this._getSceneList();
-    }
-
-    /**
-     * Get all the subdirectories (as tags) and their source files from the video directory.
-     *
-     * @returns {Array} The source files with the tag
-     */
-    _getSceneList() {
-        if (!global.rootDirectory) {
-            throw new Error('Global variable rootDirectory is not set.');
-        }
-
-        return this.fileHelper.getAllFilesFromFolder(global.rootDirectory + "/video");
     }
 
     /**
@@ -42,8 +28,8 @@ class StreamHelper {
 
         // Create a playlist and set the default scene
         try {
-            this.changeScene('default', sessionId);
             this.fileHelper.buildRootPlaylist(sessionId);
+            this.changeScene(sessionId, questionnaire);
         } catch (e) {
             Logger.error('Error while setting the default scene:' + e);
             //throw?
@@ -95,21 +81,7 @@ class StreamHelper {
         let counter = 5000; // milliseconds
 
         let changer = function () {
-            let tag = '';
-            // If there are still no answers given
-            if (questionnaire.answerList.givenAnswers.length === 0) {
-                // Choose a random question to start with
-                tag = 'default';
-            } else {
-                // Get the best tag available
-                tag = questionnaire.tagList.getBestTag();
-
-                // Increase the amount of plays and change the scene
-                tag.playCount++;
-            }
-
-            console.table(questionnaire.tagList.all());
-            t.changeScene(tag, sessionId);
+            t.changeScene(sessionId, questionnaire);
 
             // Call the function again after X seconds
             if (questionnaire.needsRemoval !== true) {
@@ -130,29 +102,48 @@ class StreamHelper {
      *
      * @param tag {Tag|string} A tag object or the title of a tag
      * @param sessionId {string} The ID of the current session
+     * @param questionnaire
      *
      * @returns {boolean} true if a scene is available, false if not
      */
-    changeScene(tag, sessionId) {
+    changeScene(sessionId, questionnaire) {
         if (!global.rootDirectory) {
             throw new Error('Global variable rootDirectory is not set.');
         }
 
-        // Filter list on tag
-        const newList = this.sceneList.filter(function (a) {
-            return typeof tag === 'object' ? a.tag === tag.title : a.tag === tag;
-        });
+        let tag = '';
+        // If there are still no answers given
+        if (questionnaire.answerList.givenAnswers.length === 0) {
+            // Choose a random question to start with
+            tag = 'default';
+        } else {
+            // Get the best tag available
+            tag = questionnaire.tagList.getBestTag();
+
+            // Increase the amount of plays and change the scene
+            tag.playCount++;
+        }
+
+        let playlist = [];
+        const videos = questionnaire.videoList.videos;
+
+        // Match videos with the best tag available
+        for(const v in videos) {
+            if(videos[v].tags.includes(typeof tag === 'object' ? tag.title : tag)) {
+                playlist.push(videos[v].source);
+            }
+        }
 
         // return false if list is empty
-        if (!(newList.length > 0)) {
+        if (!(playlist.length > 0)) {
             Logger.warn('There are no available videos to play for tag "' + (typeof tag === 'object' ? tag.title : tag) + '".');
             return false;
         }
 
         // Build text for playlist file
         let text = 'ffconcat version 1.0';
-        for (let l in newList) {
-            text += '\nfile ' + newList[l].tag + '/' + newList[l].file;
+        for (let l in playlist) {
+            text += '\nfile ' + playlist[l];
         }
 
         this.fileHelper.changeFileContents(global.rootDirectory + '/video/' + sessionId + '_playlist.txt', text);

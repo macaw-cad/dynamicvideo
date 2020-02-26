@@ -44,6 +44,7 @@ class IndexController {
         q.parseJsonToQuestionList();
         q.parseJsonToAnswerList();
         q.parseJsonToTagList();
+        q.parseJsonToVideoList();
 
         return q;
     }
