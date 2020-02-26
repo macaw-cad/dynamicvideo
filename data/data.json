@@ -4,179 +4,260 @@
       "id": 0,
       "desc": "What type of stay do you prefer?",
       "answers": [
-        0,
-        1
+        {
+          "id": 0,
+          "desc": "All inclusive",
+          "tags": [
+            "relax"
+          ]
+        },
+        {
+          "id": 1,
+          "desc": "Different apartments, guesthouses or hostels",
+          "tags": [
+            "adventure",
+            "trip"
+          ]
+        }
       ]
     },
     {
       "id": 1,
       "desc": "Which activity do you like the most?",
       "answers": [
-        2,
-        3,
-        4,
-        5
-      ],
-      "based_on": [
+        {
+          "id": 2,
+          "desc": "Swimming and relaxing",
+          "tags": [
+            "relax",
+            "swimming"
+          ]
+        },
+        {
+          "id": 3,
+          "desc": "Extreme sports",
+          "tags": [
+            "adventure",
+            "sport",
+            "nature"
+          ]
+        },
+        {
+          "id": 4,
+          "desc": "Visiting a museum",
+          "tags": [
+            "culture",
+            "city"
+          ]
+        },
+        {
+          "id": 5,
+          "desc": "Partying",
+          "tags": [
+            "party",
+            "city"
+          ]
+        }
       ]
     },
     {
       "id": 2,
       "desc": "Where do you like to see yourself?",
       "answers": [
-        6,
-        7
-      ],
-      "based_on": [
+        {
+          "id": 6,
+          "desc": "On a road trip",
+          "tags": [
+            "adventure",
+            "trip",
+            "car"
+          ]
+        },
+        {
+          "id": 7,
+          "desc": "At a cruise",
+          "tags": [
+            "cruise",
+            "relax"
+          ]
+        }
       ]
     },
     {
       "id": 3,
       "desc": "Do you like nature more or the city?",
       "answers": [
-        8,
-        9
-      ],
-      "based_on": [
+        {
+          "id": 8,
+          "desc": "Nature",
+          "tags": [
+            "nature"
+          ]
+        },
+        {
+          "id": 9,
+          "desc": "City trip",
+          "tags": [
+            "city"
+          ]
+        }
       ]
     },
     {
       "id": 4,
       "desc": "What type of weather do you prefer?",
       "answers": [
-        10,
-        11
-      ],
-      "based_on": [
+        {
+          "id": 10,
+          "desc": "Cold",
+          "tags": [
+            "cold"
+          ]
+        },
+        {
+          "id": 11,
+          "desc": "Warm",
+          "tags": [
+            "beach",
+            "warm"
+          ]
+        }
       ]
     },
     {
       "id": 5,
       "desc": "Which type of transport do you want to use?",
       "answers": [
-        12,
-        13,
-        14
-      ],
-      "based_on": [
+        {
+          "id": 12,
+          "desc": "Airplane",
+          "tags": [
+            "airplane"
+          ]
+        },
+        {
+          "id": 13,
+          "desc": "Car",
+          "tags": [
+            "trip",
+            "car"
+          ]
+        },
+        {
+          "id": 14,
+          "desc": "Boat",
+          "tags": [
+            "cruise"
+          ]
+        }
       ]
     }
   ],
-  "answers": [
+  "videos": [
     {
-      "id": 0,
-      "desc": "All inclusive",
+      "source": "maps.flv",
       "tags": [
-        "relax"
+        "default"
       ]
     },
     {
-      "id": 1,
-      "desc": "Different apartments, guesthouses or hostels",
+      "source": "swimming.flv",
       "tags": [
-        "adventure",
-        "trip"
-      ]
-    },
-    {
-      "id": 2,
-      "desc": "Swimming and relaxing",
-      "tags": [
+        "warm",
         "relax",
-        "swimming"
+        "swimming",
+        "sun"
       ]
     },
     {
-      "id": 3,
-      "desc": "Extreme sports",
+      "source": "beach.flv",
       "tags": [
-        "adventure",
-        "sport",
-        "nature"
+        "warm",
+        "beach",
+        "relax",
+        "sun"
       ]
     },
     {
-      "id": 4,
-      "desc": "Visiting a museum",
+      "source": "roadtrip.flv",
       "tags": [
-        "culture",
-        "city"
-      ]
-    },
-    {
-      "id": 5,
-      "desc": "Partying",
-      "tags": [
-        "party",
-        "city"
-      ]
-    },
-    {
-      "id": 6,
-      "desc": "On a road trip",
-      "tags": [
-        "adventure",
+        "nature",
         "trip",
         "car"
       ]
     },
     {
-      "id": 7,
-      "desc": "At a cruise",
+      "source": "cruise.flv",
       "tags": [
         "cruise",
-        "relax"
-      ]
-    },
-    {
-      "id": 8,
-      "desc": "Nature",
-      "tags": [
-        "nature"
-      ]
-    },
-    {
-      "id": 9,
-      "desc": "City trip",
-      "tags": [
-        "city"
-      ]
-    },
-    {
-      "id": 10,
-      "desc": "Cold",
-      "tags": [
-        "cold"
-      ]
-    },
-    {
-      "id": 11,
-      "desc": "Warm",
-      "tags": [
         "beach",
-        "warm"
+        "warm",
+        "sun"
       ]
     },
     {
-      "id": 12,
-      "desc": "Airplane",
+      "source": "1.mp4",
+      "tags": [
+        "sport",
+        "airplane",
+        "adventure"
+      ]
+    },
+    {
+      "source": "2.mp4",
+      "tags": [
+        "sport",
+        "airplane",
+        "adventure"
+      ]
+    },
+    {
+      "source": "airplane.flv",
       "tags": [
         "airplane"
       ]
     },
     {
-      "id": 13,
-      "desc": "Car",
+      "source": "amsterdam.flv",
       "tags": [
+        "city",
         "trip",
-        "car"
+        "culture"
       ]
     },
     {
-      "id": 14,
-      "desc": "Boat",
+      "source": "buddha.flv",
       "tags": [
-        "cruise"
+        "culture"
+      ]
+    },
+    {
+      "source": "milkyway.flv",
+      "tags": [
+        "nature",
+        "trip",
+        "adventure"
+      ]
+    },
+    {
+      "source": "snow.flv",
+      "tags": [
+        "cold",
+        "nature"
+      ]
+    },
+    {
+      "source": "temple.flv",
+      "tags": [
+        "culture"
+      ]
+    },
+    {
+      "source": "waterfall.flv",
+      "tags": [
+        "nature",
+        "adventure",
+        "trip"
       ]
     }
   ]
